@@ -1,4 +1,4 @@
-vizlab: "0.1.4"
+vizlab: "0.1.7"
 info:
   id: hurricane-harvey
   name: Hurricane Harvey's Water Footprint
@@ -242,7 +242,7 @@ publish:
   -
     id: matthew-page
     name: index
-    template: "/Library/Frameworks/R.framework/Versions/3.4/Resources/library/vizlab/templates/fullPage.mustache"
+    template: fullpage
     publisher: page
     depends: ["header-section", "figure-section", "data-sources", "map-figure-css", 
       "header-footer-css", "precip-colors", "timesteps", "jquery-js", "animate-js",
@@ -281,7 +281,7 @@ publish:
       id: header
       title: Hurricane Harvey's Water Footprint
       logo: usgs-logo
-      caption: Water impacts from Harvey Matthew
+      caption: Water impacts from Hurricane Harvey
   -
     id: data-sources
     template: layout/templates/dataSources.mustache
