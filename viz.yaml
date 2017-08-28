@@ -1,4 +1,4 @@
-vizlab: "0.1.7"
+vizlab: "0.1.4"
 info:
   id: hurricane-harvey
   name: Hurricane Harvey's Water Footprint
@@ -7,7 +7,7 @@ info:
   path: hurricane-harvey
   analytics-id: UA-78530187-4
   description: >-
-    Hurricane Harvey approached the U.S. Gulf coast on August 26, 2017.
+    Hurricane Harvey approached the U.S. Gulf coast on August 25, 2017.
     This visualization shows the hurricane's impact on precipitation and streamflow.
   keywords: >-
     water, hurricane, matthew, USGS, NOAA, VIZLAB, NWIS, flood, storm track
@@ -270,7 +270,7 @@ publish:
   -
     id: matthew-page
     name: index
-    template: fullpage
+    template: "/Library/Frameworks/R.framework/Versions/3.4/Resources/library/vizlab/templates/fullPage.mustache"
     publisher: page
     depends: ["header-section", "figure-section", "data-sources", "map-figure-css", 
       "header-footer-css", "precip-colors", "timesteps", "jquery-js", "animate-js",
@@ -289,7 +289,7 @@ publish:
       figure: matthew-map
       title: Hurricane Harvey’s Water Footprint
       line1: >-
-        Hurricane Harvey approached the U.S. Gulf coast on August 26,2017.
+        Hurricane Harvey approached the U.S. Gulf coast on August 25, 2017.
         In the map above, the hurricane’s impact on precipitation and streamflow are 
         shown. Normalized discharge (cubic feet per second) 
         at a selection of US Geological Survey gaging stations within ~200 km of the eye of the hurricane is shown 
@@ -298,7 +298,7 @@ publish:
         which can impact the effect of precipitation on flow. Gages shown do not 
         include the US Geological Survey Short-Term Network gages deployed to capture 
         more detailed effects of the hurricane ( 
-      line2: "http://stn.wim.usgs.gov/fev/#MatthewOctober2016"
+      line2: "http://stn.wim.usgs.gov/FEV/#HarveyAug2017"
       line3: ). 
   -
     id: header-section
@@ -309,7 +309,7 @@ publish:
       id: header
       title: Hurricane Harvey's Water Footprint
       logo: usgs-logo
-      caption: Water impacts from Hurricane Harvey
+      caption: Water impacts from Harvey Matthew
   -
     id: data-sources
     template: layout/templates/dataSources.mustache
