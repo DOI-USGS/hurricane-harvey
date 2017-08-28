@@ -1,27 +1,27 @@
 vizlab: "0.1.7"
 info:
-  id: hurricane-matthew
-  name: Hurricane Matthew's Water Footprint
-  date: 2016-10-06
-  publish-date: 2016-10-11
-  path: hurricane-matthew
+  id: hurricane-harvey
+  name: Hurricane Harvey's Water Footprint
+  date: 2017-08-28
+  publish-date: 2017-08-28
+  path: hurricane-harvey
   analytics-id: UA-78530187-4
   description: >-
-    Hurricane Matthew approached the southeastern U.S. coast on October 7, 2016.
+    Hurricane Harvey approached the U.S. Gulf coast on August 26, 2017.
     This visualization shows the hurricane's impact on precipitation and streamflow.
   keywords: >-
     water, hurricane, matthew, USGS, NOAA, VIZLAB, NWIS, flood, storm track
   audience: General public
-  url: https://owi.usgs.gov/vizlab/hurricane-matthew/
+  url: https://owi.usgs.gov/vizlab/hurricane-harvey/
   thumbnail:    
     url: https://owi.usgs.gov/vizlab/hurricane-matthew/images/matthew_water2.png
     width: 1124
     height: 912
     type: image/png
-    alttext: Hurricane Matthew
+    alttext: Hurricane Harvey
   thumbnail-landing:
     url: images/matthew_water2.png
-    alttext: Hurricane Matthew
+    alttext: Hurricane Harvey
   contributors:
     -
       name: Alison Appling
@@ -222,8 +222,8 @@ visualize:
     mapdata: "matthew-counties"
     mimetype: image/svg+xml
     inline: true
-    title: "Hurricane Matthew's impact on precipitation and streamflow"
-    alttext: "Map of Hurricane Matthew's water footprint"
+    title: "Hurricane Harvey's impact on precipitation and streamflow"
+    alttext: "Map of Hurricane Harvey's water footprint"
     
 publish:
   -
@@ -287,9 +287,9 @@ publish:
     context:
       id: map-figure
       figure: matthew-map
-      title: Hurricane Matthew’s Water Footprint
+      title: Hurricane Harvey’s Water Footprint
       line1: >-
-        Hurricane Matthew approached the southeastern U.S. coast on October 7, 2016.
+        Hurricane Harvey approached the U.S. Gulf coast on August 26,2017.
         In the map above, the hurricane’s impact on precipitation and streamflow are 
         shown. Normalized discharge (cubic feet per second) 
         at a selection of US Geological Survey gaging stations within ~200 km of the eye of the hurricane is shown 
@@ -307,9 +307,9 @@ publish:
     depends: ["usgs-logo"]
     context:
       id: header
-      title: Hurricane Matthew's Water Footprint
+      title: Hurricane Harvey's Water Footprint
       logo: usgs-logo
-      caption: Water impacts from Hurricane Matthew
+      caption: Water impacts from Harvey Matthew
   -
     id: data-sources
     template: layout/templates/dataSources.mustache
