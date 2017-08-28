@@ -320,7 +320,7 @@ publish:
       line1: "Streamflow: U.S. Geological Survey National Water Information System ("
       waterDataLink: http://waterdata.usgs.gov/nwis
       line2: >-
-        ). Time series of discharge at selected gages within ~200 km of the eye of the storm are shown through time, 
+        ). Time series of discharge at selected gages impacted by the storm are shown through time, 
         ordered by latitude and normalized to site-specific maximum discharge observed over the duration of the hurricane. 
       line4: "Precipitation: National Weather Service Environmental Modeling Center National Center for Environmental Prediction Stage IV precipitation analysis ("
       emcLink: http://www.emc.ncep.noaa.gov/mmb/ylin/pcpanl/stage4/
