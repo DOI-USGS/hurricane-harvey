@@ -5,12 +5,12 @@ info:
   date: 2017-08-28
   publish-date: 2017-08-28
   path: hurricane-harvey
-  analytics-id: UA-78530187-4
+  analytics-id: UA-78530187-7
   description: >-
     Hurricane Harvey approached the U.S. Gulf coast on August 26, 2017.
     This visualization shows the hurricane's impact on precipitation and streamflow.
   keywords: >-
-    water, hurricane, matthew, USGS, NOAA, VIZLAB, NWIS, flood, storm track
+    water, hurricane, matthew, USGS, NOAA, VIZLAB, NWIS, flood
   audience: General public
   url: https://owi.usgs.gov/vizlab/hurricane-harvey/
   thumbnail:    
@@ -81,19 +81,6 @@ fetch:
     scripts: scripts/fetch/fetch.counties.R
     mimetype: application/zip
   -
-    id: matthew-track
-    location: cache/matthew.zip
-    ocean: al
-    stormnum: 09
-    year: 2017
-    reader: shp
-    fetcher: hurricaneTrack
-    scripts: scripts/fetch/hurricaneTrack.R
-    mimetype: application/zip
-    refetch: TRUE
-    metadata: "Updates every 6 hours on http://www.nhc.noaa.gov/gis/"
-    comment: disabling refetch until timestamp is hooked up
-  -
     id: precip-data
     fetcher: precip
     start.date: "2017-08-25"
@@ -144,21 +131,6 @@ process:
     scripts: scripts/process/process.matthew_counties.R
     reader: rds
     depends: "states"
-  -
-    id: storm-track
-    location: cache/storm-track.rds
-    processor: matthew_track
-    scripts: scripts/process/process.matthew_counties.R
-    reader: rds
-    depends: ["matthew-track", "matthew-counties"]
-  -
-    id: storm-location
-    location: cache/storm-location.rds
-    processor: storm_location
-    start.date: "2017-08-25"
-    end.date: "2017-08-27"
-    reader: rds
-    depends: ["matthew-track", "matthew-counties"]  
   -
     id: precip-colors
     location: cache/precip-colors.json
@@ -216,8 +188,8 @@ visualize:
     id: matthew-map
     location: figures/matthew-water.svg
     visualizer: matthew_map
-    depends: ["matthew-counties","matthew-states", "storm-track", "classifyBins", 
-      'storm-location',"matthew-sites", "precip-colors", "precip-breaks", "discharge-sparks","matthew-borders"]
+    depends: ["matthew-counties","matthew-states", "classifyBins", 
+      "matthew-sites", "precip-colors", "precip-breaks", "discharge-sparks","matthew-borders"]
     scripts: scripts/visualize/visualize.matthew_map.R
     mapdata: "matthew-counties"
     mimetype: image/svg+xml
@@ -327,10 +299,7 @@ publish:
       line5: ), aggregated according to Blodgett (2013, 
       pubsLink: http://pubs.usgs.gov/fs/2013/3035/pdf/fs2013-3035.pdf
       line6: )
-      line7: "Storm Track: National Oceanic and Atmospheric Administration National Hurricane Center Preliminary Best Track for Hurricane Matthew ("
-      nhcLink: http://www.nhc.noaa.gov/gis/
-      line8: )
-  
+
   -
     id: svg-css
     location: layout/css/matthew-svg.css
