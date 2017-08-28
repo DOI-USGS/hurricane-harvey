@@ -1,0 +1,19 @@
+auth.R
+cache/
+user/
+figures/
+target/
+vizlab/
+makefile
+
+# RStudio files
+*.Rproj
+.Rproj.user
+.RData
+.Ruserdata
+
+# History files
+.Rhistory
+.Rapp.history
+# Session Data files
+.RData

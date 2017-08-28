@@ -1,0 +1,149 @@
+#header{
+	background:rgb(0,51,102);
+	color:#fff;
+	height:32px;
+	padding:8px  0 0 10px;
+	border-bottom:5px solid rgb(210,210,210);
+	font-family:"Source Sans Pro", sans-serif;
+	}
+	
+p {
+  font-size:1.2em;
+  line-height:1.5em;
+}
+#header h3{
+	padding-top:3px;
+	font-size:0.9em;
+	font-weight:400;
+	}
+	
+#header img{
+	float:left;
+	margin-right:5px;
+	width:80px;
+	}
+	
+footer{
+	background:rgb(0,51,102);
+	min-height:400px;
+	color:#fff;
+	border-top:5px solid rgb(210,210,210);
+	padding:10px;
+	}
+	
+footer .p-share{
+  margin-bottom:15px;
+}
+
+footer:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+     }
+
+#vizlabPromo {
+  height: 100px;
+  margin-bottom: 15px;
+}
+#vizlabPromo #vizlab-logo {
+  height: 100%;
+}
+
+#relatedVizzies,
+#relatedBlogs{
+  font-family: "Source Sans Pro", sans-serif;
+} 
+
+#relatedVizzies h5,
+#relatedBlogs h5 {
+  margin-bottom: 10px;
+}
+#relatedVizzies h4,
+#relatedBlogs h4 {
+  margin: 0 0 5px 0;
+  font-weight: 400;
+  color:#fff;
+}
+.footerThumnail {
+  height: 180px;
+  margin: 0 0 15px 0;
+  overflow: hidden;
+}
+.footerThumnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.blog {
+  border: 1px solid #bebebe;
+}
+
+/* Parts:share */
+.p-share {
+  text-align: center;
+}
+
+.p-share a {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  background-color: #263238;
+  border-radius: 100%;
+  color: #eceff1;
+  margin: 0 .5rem;
+}
+	
+	@media screen and (min-width:768px){
+	  /*Header CSS*/
+  	#logo{
+  		width:760px;
+  		margin:0 auto;
+  		}
+  		
+  	#header h3{
+  		padding-top:0;
+  		font-size:1.2em;
+  	}
+  	
+  	#vizlabPromo {
+      width:660px;
+      margin:10px auto;
+    }
+  	
+  	#relatedVizzies{
+    width: 660px;
+    margin: 0 auto;
+    }
+    #relatedBlogs{
+    width: 660px;
+    margin: 0 auto;
+    clear:both;
+    }
+  .relatedItem {
+    width: 49%;
+    margin-right: 1%;
+    float: left;
+  }
+  .footerThumnail {
+    height: 200px;
+  }
+  .titleHandler {
+    height: 45px;
+    vertical-align: text-bottom;
+    position: relative;
+  }
+  .titleHandler h4 {
+    position: absolute;
+    bottom: 0;
+  }
+}
+
+@media screen and (min-width:1200px){
+  #logo{
+    width:960px;
+  }
+}
