@@ -10,7 +10,7 @@ info:
     Hurricane Harvey approached the U.S. Gulf coast on August 25, 2017.
     This visualization shows the hurricane's impact on precipitation and streamflow.
   keywords: >-
-    water, hurricane, matthew, USGS, NOAA, VIZLAB, NWIS, flood, storm track
+    water, hurricane, harvey, USGS, NOAA, VIZLAB, NWIS, flood, storm track
   audience: General public
   url: https://owi.usgs.gov/vizlab/hurricane-harvey/
   thumbnail:    
@@ -327,7 +327,7 @@ publish:
       line5: ), aggregated according to Blodgett (2013, 
       pubsLink: http://pubs.usgs.gov/fs/2013/3035/pdf/fs2013-3035.pdf
       line6: )
-      line7: "Storm Track: National Oceanic and Atmospheric Administration National Hurricane Center Preliminary Best Track for Hurricane Matthew ("
+      line7: "Storm Track: National Oceanic and Atmospheric Administration National Hurricane Center Preliminary Best Track for Hurricane Harvey ("
       nhcLink: http://www.nhc.noaa.gov/gis/
       line8: )
   
