@@ -97,7 +97,7 @@ grab_spark <- function(vals){
   x = svglite::xmlSVG({
     par(omi=c(0,0,0,0), mai=c(0,0,0,0))
     plot(vals, type='l', axes=F, ann=F)
-  }, height=0.2, width=2)
+  }, height=0.4, width=2)
   xml2::xml_attr(xml2::xml_find_first(x, '//*[local-name()="polyline"]'),'points')
 }
 
