@@ -60,7 +60,7 @@ process.matthew_track <- function(viz){
 # viz <- viz$process
 # viz <- viz[[which(unlist((lapply(viz, function(x) x$id == "matthew-sites"))))]]
 
-fetch.matthew_sites <- function(viz){
+fetch.matthew_sites <- function(viz=as.viz("matthew-sites")){
   library(rgeos)
   library(sp)
   library(dplyr)
