@@ -32,12 +32,6 @@ info:
     dplyr: 
       repo: CRAN
       version: 0.7.2
-    maps:
-      repo: CRAN
-      version: 3.1.1
-    maptools:
-      repo: CRAN
-      version: 0.9-2
     readr:
       repo: CRAN
       version: 1.1.1
