@@ -123,6 +123,15 @@ fetch:
     reader: rds
     depends: ["sites-data","matthew-sites"]
   -
+    id: nws_data
+    location: cache/nws_data.rds
+    fetcher: nws_data
+    scripts: scripts/fetch/fetch.nws_data.R
+    reader: rds
+    depends: 
+      sites-data: sites-data
+      nws_conversion: nws_conversion
+  -
     id: discharge-data
     fetcher: discharge
     location: cache/discharge.rds
