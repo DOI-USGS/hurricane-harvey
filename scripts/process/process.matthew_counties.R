@@ -64,7 +64,7 @@ fetch.matthew_sites <- function(viz){
   library(rgeos)
   library(sp)
   library(dplyr)
-  ignore.sites <- c('08041780', '08211503', '08028500') # sites that hydropeak or are otherwise not representative
+  ignore.sites <- c('08041780', '08211503', '08028500', '08067070') # sites that hydropeak or are otherwise not representative
   counties <- readData(viz[['depends']][2])
   sites <- readData(viz[['depends']][1]) %>% 
     filter(!site_no %in% ignore.sites) %>% 
@@ -130,8 +130,9 @@ process.storm_location <- function(viz){
     as.POSIXct(sprintf('%s-%s-%s %s', YEAR, MONTH, DAY, HHMM), format='%Y-%m-%d %H%M', tz="America/New_York")
   }
   
-  dbf.file <- file.path(shp.path, 'AL092017_pts.dbf')
-  shp.data <- foreign::read.dbf(dbf.file) %>% 
+  warning('NWS file pattern is hard-coded here and is storm-specific')
+  
+  shp.data <- rgdal::readOGR(shp.path, layer = 'AL092017_pts') %>% data.frame %>% 
     filter(STORMNAME=="HARVEY") %>% 
     mutate(DateTime = as.time(YEAR, MONTH, DAY, HHMM)) %>% 
     select(LAT, LON, DateTime, INTENSITY)
