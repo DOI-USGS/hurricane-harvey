@@ -1,4 +1,4 @@
-vizlab: "0.1.4"
+vizlab: "0.1.7"
 info:
   id: hurricane-harvey
   name: Hurricane Harvey's Water Footprint
@@ -10,7 +10,7 @@ info:
     Hurricane Harvey approached the U.S. Gulf coast on August 26, 2017.
     This visualization shows the hurricane's impact on precipitation and streamflow.
   keywords: >-
-    water, hurricane, matthew, USGS, NOAA, VIZLAB, NWIS, flood
+    water, hurricane, harvey, USGS, NOAA, VIZLAB, NWIS, flood
   audience: General public
   url: https://owi.usgs.gov/vizlab/hurricane-harvey/
   thumbnail:    
@@ -74,13 +74,6 @@ fetch:
     refetch: FALSE
     mimetype: application/zip
   -
-    id: site_footy
-    location: cache/Harvey_footy.zip
-    reader: shp
-    fetcher: site_footy
-    scripts: scripts/fetch/fetch.counties.R
-    mimetype: application/zip
-  -
     id: matthew-track
     location: cache/matthew.zip
     ocean: al
@@ -103,6 +96,11 @@ fetch:
     mimetype: text/csv
     refetch: true
     comment: disabling refetch to avoid too many GDP requests
+  -
+    id: site_footy
+    location: data/Harvey_footy.zip
+    mimetype: application/zip
+    reader: shp
   -
     id: matthew-sites
     location: cache/sites_geo.rds
