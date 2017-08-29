@@ -1,0 +1,78 @@
+footer{
+	background:rgb(0,51,102);
+	min-height:200px;
+	color:#fff;
+	border-top:5px solid rgb(210,210,210);
+	margin-top:20px;
+	}
+	
+footer a:link{
+  color:#fff;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+footer a:visited{
+  color:#fff;
+}
+
+footer a:link:hover,
+footer a:hover{
+  text-decoration:underline;
+}
+
+footer a:active{
+  color:#fff;
+}
+
+.usgsLogoFooterArea{
+  padding:10px;
+}
+
+.footerMenu{
+  min-height:40px;
+  padding:10px;
+  cursor:pointer;
+}
+
+.footerMenu p{
+  line-height:2em;
+  font-size:.95em;
+}
+
+@media screen and (min-width:768px){
+  .footerContentAligner{
+    min-height:40px;
+    display:flex;
+    flex-direction:row;
+  }
+  
+  .usgsLogoFooterArea,
+  .footerMenu{
+    flex:1;
+  }
+  
+}
+
+@media screen and (min-width:1024px){
+	
+	.footerContentAligner{
+		width:770px;
+		margin:0 auto;
+	}
+}
+
+@media screen and (min-width:1500px){
+	
+	.footerContentAligner{
+		width:810px;
+	}
+}
+
+@media screen and (min-width:2000px){
+
+	.footerContentAligner{
+		width:1210px;
+	}
+	
+}

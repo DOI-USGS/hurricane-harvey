@@ -341,16 +341,21 @@ publish:
     location: layout/js/animate.js
     mimetype: application/javascript
   -
+    id: footerCSS
+    location: layout/css/footer.css
+    mimetype: text/css
+    publisher: resource
+  -
     id: harvey-page
     name: index
     publisher: page
     template: fullpage
-    depends: ["footer","header-section", "figure-section", "data-sources", "map-figure-css", 
+    depends: ["footer","footerCSS","header-section", "figure-section", "data-sources", "map-figure-css", 
       "header-footer-css", "precip-colors", "timesteps", "jquery-js", "animate-js",
       "svg-css","thumbnail", "vizlab-favicon"]
     context:
       footer: footer
-      resources: ["map-figure-css","header-footer-css", "jquery-js", "animate-js", "svg-css",
+      resources: ["map-figure-css","header-footer-css","footerCSS", "jquery-js", "animate-js", "svg-css",
         "<link rel=\"icon\" type=\"image/ico\" href=\"images/favicon.ico\"/>"]
       sections: [ "header-section", "figure-section", "data-sources"]
   -
@@ -391,7 +396,7 @@ publish:
     depends: ["usgs-logo","lastUpdated"]
     context:
       id: footer
-      logo: usgs-logo
+      usgs-logo: usgs-logo
   -
     id: data-sources
     template: layout/templates/dataSources.mustache
