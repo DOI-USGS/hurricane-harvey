@@ -75,6 +75,13 @@ line, polyline, path{
   fill: #057083;
   stroke: white;
 }
+
+.nwis-inactive {
+  cursor: pointer;
+  fill: #023139;
+  stroke: none;
+}
+
 .nwis-dot, .nwis-legend-dot, .nwis{
   stroke-width:0.75;
 }

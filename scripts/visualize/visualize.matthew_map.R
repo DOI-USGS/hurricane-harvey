@@ -2,7 +2,7 @@
 # viz <- viz$visualize
 # viz <- viz[[which(unlist((lapply(viz, function(x) x$id == "matthew-map"))))]]
 
-visualize.matthew_map <- function(viz){
+visualize.matthew_map <- function(viz = as.viz("matthew-map")){
   
   counties <- readData(viz[['depends']][1])
   states <- readData(viz[['depends']][2])
@@ -18,21 +18,27 @@ visualize.matthew_map <- function(viz){
   library(svglite)
   library(dplyr)
   
-  svglite::svglite(viz[['location']])
-  par(mai=c(0,0,0,0), omi=c(0,0,0,0), xaxs = 'i', yaxs = 'i')
-  sp::plot(counties, expandBB = c(0,0.02,0,0.24))
-  #sp::plot(flowlines, add=TRUE)
-  sp::plot(state.borders, add=TRUE)
-  sp::plot(states, add=TRUE)
-  sp::plot(track, add=TRUE)
-  sp::plot(gages, pch=20, add=TRUE)
-  sp::plot(storm, pch=20, add=TRUE)
+  set.plot <- function(){
+    par(mai=c(0,0,0,0), omi=c(0,0,0,0), xaxs = 'i', yaxs = 'i')
+    sp::plot(counties, expandBB = c(0,0.02,0,0.24))
+  }
+  num.harv.gages <- 0
   fip.cd <- as.character(counties$FIPS[counties@plotOrder])
   cty.name <- as.character(counties$countyName[counties@plotOrder])
-  dev.off()
+  svg <- svglite::xmlSVG(width = 10, height = 8, {
+    set.plot()
+    sp::plot(state.borders, add=TRUE)
+    sp::plot(states, add=TRUE)
+    sp::plot(track, add=TRUE)
+    sp::plot(gages, pch=20, add=TRUE)
+    sp::plot(storm, pch=20, add=TRUE)
+  })
+  
+  svg.addons <- svglite::xmlSVG(width = 10, height = 8, {
+    set.plot()
+    sp::plot(non.matthew.gages, pch=20, add=TRUE) # doing this because we are coding based on counting numbers of circles...
+  })
   library(xml2)
-  svg <- read_xml(viz[['location']])
-
   # let this thing scale:
   xml_attr(svg, "preserveAspectRatio") <- "xMidYMid meet" 
   xml_attr(svg, "id") <- "matthew-svg"
@@ -73,10 +79,9 @@ visualize.matthew_map <- function(viz){
   
   g.track <- xml_add_child(svg, 'g', id='track','class'='track-polyline')
   g.storm <- xml_add_child(svg, 'g', id='storm','class'='storm-dots')
-  g.legend <- xml_add_child(svg, 'g', id='precip-legend','class'='legend', transform='translate(25,25)scale(0.8)')
+  g.legend <- xml_add_child(svg, 'g', id='precip-legend','class'='legend', transform='translate(15,15)scale(0.8)')
   g.watermark <- xml_add_child(svg, 'g', id='usgs-watermark',transform=sprintf('translate(2,%s)scale(0.40)', as.character(as.numeric(vb[4])-62)))
   g.borders <- xml_add_child(svg, 'g', id='focus-borders') # on top
-  #g.rivers <- xml_add_child(svg, 'g', id='rivers','class'='river-polyline')
   
   rmv.i <- c()
   for (j in (i+1):(i+length(state.borders))){
@@ -87,18 +92,15 @@ visualize.matthew_map <- function(viz){
     xml_attr(p[[i]], 'class') <- 'state-polygon'
     xml_attr(p[[i]], 'clip-path') <- "url(#svg-bounds)"
   }
+
+  xml_remove(p[rmv.i])
   
-  #for (i in rmv.i){
-    xml_remove(p[rmv.i])
-  #}
   
   pl <- xml_find_all(svg, '//*[local-name()="polyline"]')
   for (i in (length(pl)+1 - length(track)): length(pl)){
     xml_add_child(g.track, 'polyline', points = xml_attr(pl[i], 'points'))
   }
-  # for (i in 1:(length(pl)- length(track))){
-  #   xml_add_child(g.rivers, 'polyline', points = xml_attr(pl[i], 'points'), 'clip-path'="url(#svg-bounds)")
-  # }
+
   
   
   cnt = 0; # count how many actually have data
@@ -121,7 +123,7 @@ visualize.matthew_map <- function(viz){
   xml_add_child(g.spark, 'rect', x='-3', width="137", height='1em', class='legend-box')
   xml_add_child(g.spark, 'text', x='66', 'USGS stream gage discharge', dy='1em', 'text-anchor'='middle', class='svg-text', style='font-size: 0.7em;')
   
-  ys <- seq(20,as.numeric(vb[4])-180, length.out = cnt)
+  ys <- seq(20,as.numeric(vb[4])-190, length.out = cnt)
   cnt = 0;
   for (i in 1:length(gages)){ # FRAGILE - assumes all gages are on the map!!
     
@@ -149,7 +151,20 @@ visualize.matthew_map <- function(viz){
     storm.i <- storm.i - 1
   }
   
-  xml_add_child(g.legend, 'rect', x="-8", y="-8", width='175', height='256', class='legend-box')
+  non.cr <- xml_find_all(svg.addons, '//*[local-name()="circle"]')
+  if (length(non.cr) != length(non.matthew.gages)){
+    stop('the count of non storm gages on the map doesnt match the count of named gages.')
+  }
+  for (i in 1:length(non.matthew.gages)){ 
+    xml_add_child(g.storm, 'circle', cx = xml_attr(non.cr[i], 'cx'), cy = xml_attr(non.cr[i], 'cy'), 
+                  class='nwis-inactive',
+                  onclick=sprintf("openNWIS('%s')", non.matthew.gages[i,]$site_no), 
+                  onmousemove=sprintf("hovertext('USGS %s',evt);", non.matthew.gages[i,]$site_no),
+                  onmouseout=sprintf("hovertext(' ');"),
+                  r='1.5')
+  }
+  
+  xml_add_child(g.legend, 'rect', x="-8", y="-8", width='190', height='265', class='legend-box')
   xml_add_child(g.legend, 'text', 'Legend', 'class'='legend-title svg-text', dy='0.75em')
   xml_add_child(g.legend, 'text', 'Inches per hour', 'class'='svg-text', dy='2em')
   xml_add_child(g.legend, 'text', 'dy'= "3.7em", class='smallprint-text svg-text', "(county average precip)")
@@ -167,7 +182,11 @@ visualize.matthew_map <- function(viz){
   xml_add_child(g.legend, 'text', x=box.w, 'dx'="0.5em", y=as.character(as.numeric(ys[i])+30), 'dy'= "0.33em", class='storm-legend-text svg-text', "Hurricane Harvey")
   
   xml_add_child(g.legend, 'circle', cx = as.character(as.numeric(box.w)/2), r='3', cy = as.character(as.numeric(ys[i])+50), class='nwis-legend-dot')
-  xml_add_child(g.legend, 'text', x=box.w, 'dx'="0.5em", y=as.character(as.numeric(ys[i])+50), 'dy'= "0.33em", class='nwis-legend-text svg-text', "USGS stream gage")
+  xml_add_child(g.legend, 'text', x=box.w, 'dx'="0.2em", y=as.character(as.numeric(ys[i])+50), 'dy'= "0.33em", class='nwis-legend-text svg-text', "USGS")
+  xml_add_child(g.legend, 'text', x=box.w, 'dx'="46", y=as.character(as.numeric(ys[i])+50), 'dy'= "0.33em", class='smallprint-text svg-text', "stream gage (featured)")
+  xml_add_child(g.legend, 'circle', cx = as.character(as.numeric(box.w)/2), r='3', cy = as.character(as.numeric(ys[i])+65), class='nwis-inactive')
+  xml_add_child(g.legend, 'text', x=box.w, 'dx'="0.2em", y=as.character(as.numeric(ys[i])+65), 'dy'= "0.33em", class='nwis-legend-text svg-text', "USGS")
+  xml_add_child(g.legend, 'text', x=box.w, 'dx'="46", y=as.character(as.numeric(ys[i])+65), 'dy'= "0.33em", class='smallprint-text svg-text', "stream gage")
   
   xml_add_child(svg, 'text', ' ', id='timestamp-text', class='time-text svg-text', x="647", y="95", 'text-anchor'="middle")
   
