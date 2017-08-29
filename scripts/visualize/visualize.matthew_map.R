@@ -14,6 +14,7 @@ visualize.matthew_map <- function(viz){
   legend.breaks <- readData(viz[['depends']][8])
   spark.sites <- readData(viz[['depends']][9])
   state.borders <- readData(viz[['depends']][10])
+  non.matthew.gages <- readData(viz[['depends']][11])
   library(svglite)
   library(dplyr)
   
