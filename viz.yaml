@@ -109,6 +109,13 @@ fetch:
     reader: rds
     depends: ["sites-data","matthew-counties", "site_footy"]
   -
+    id: non-matthew-sites
+    location: cache/non_sites_geo.rds
+    fetcher: non_matthew_sites
+    scripts: scripts/process/process.matthew_counties.R
+    reader: rds
+    depends: ["sites-data","matthew-sites"]
+  -
     id: discharge-data
     fetcher: discharge
     location: cache/discharge.rds
@@ -215,7 +222,8 @@ visualize:
     location: figures/matthew-water.svg
     visualizer: matthew_map
     depends: ["matthew-counties","matthew-states", "storm-track", "classifyBins", 
-      'storm-location',"matthew-sites", "precip-colors", "precip-breaks", "discharge-sparks","matthew-borders"]
+      'storm-location',"matthew-sites", "precip-colors", "precip-breaks", "discharge-sparks","matthew-borders", 
+      "non-matthew-sites"]
     scripts: scripts/visualize/visualize.matthew_map.R
     mapdata: "matthew-counties"
     mimetype: image/svg+xml
