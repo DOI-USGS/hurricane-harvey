@@ -177,7 +177,7 @@ fetch:
     id: nws_data
     location: cache/nws_data.rds
     fetcher: nws_data
-    refetch: TRUE
+    refetch: FALSE
     scripts: scripts/fetch/fetch.nws_data.R
     reader: rds
     depends: 
