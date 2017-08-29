@@ -70,7 +70,7 @@ fetch:
     location: cache/nws_conversion.rds
     reader: rds
     fetcher: nws_conversion
-    scripts: scripts/fetch/nws_conversion.R
+    scripts: scripts/fetch/fetch.nws_conversion.R
   -
     id: states
     location: cache/states.rds
