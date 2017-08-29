@@ -268,8 +268,8 @@ publish:
   -
     id: matthew-page
     name: index
-    template: "/Library/Frameworks/R.framework/Versions/3.4/Resources/library/vizlab/templates/fullPage.mustache"
     publisher: page
+    template: fullpage
     depends: ["header-section", "figure-section", "data-sources", "map-figure-css", 
       "header-footer-css", "precip-colors", "timesteps", "jquery-js", "animate-js",
       "svg-css","thumbnail", "vizlab-favicon"]
