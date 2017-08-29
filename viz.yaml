@@ -15,13 +15,13 @@ info:
   audience: General public
   url: https://owi.usgs.gov/vizlab/hurricane-harvey/
   thumbnail:    
-    url: https://owi.usgs.gov/vizlab/hurricane-matthew/images/matthew_water2.png
+    url: https://owi.usgs.gov/vizlab/hurricane-harvey/images/harvey_water2.png
     width: 1124
     height: 912
     type: image/png
     alttext: Hurricane Harvey
   thumbnail-landing:
-    url: images/matthew_water2.png
+    url: images/harvey_water2.png
     alttext: Hurricane Harvey
   contributors:
     -
@@ -75,8 +75,8 @@ fetch:
     refetch: FALSE
     mimetype: application/zip
   -
-    id: matthew-track
-    location: cache/matthew.zip
+    id: harvey-track
+    location: cache/harvey.zip
     ocean: al
     stormnum: 09
     year: 2017
@@ -103,25 +103,25 @@ fetch:
     mimetype: application/zip
     reader: shp
   -
-    id: matthew-sites
+    id: harvey-sites
     location: cache/sites_geo.rds
-    fetcher: matthew_sites
-    scripts: scripts/process/process.matthew_counties.R
+    fetcher: harvey_sites
+    scripts: scripts/process/process.harvey_counties.R
     reader: rds
-    depends: ["sites-data","matthew-counties", "site_footy"]
+    depends: ["sites-data","harvey-counties", "site_footy"]
   -
-    id: non-matthew-sites
+    id: non-harvey-sites
     location: cache/non_sites_geo.rds
-    fetcher: non_matthew_sites
-    scripts: scripts/process/process.matthew_counties.R
+    fetcher: non_harvey_sites
+    scripts: scripts/process/process.harvey_counties.R
     reader: rds
-    depends: ["sites-data","matthew-sites"]
+    depends: ["sites-data","harvey-sites"]
   -
     id: discharge-data
     fetcher: discharge
     location: cache/discharge.rds
     scripts: scripts/fetch/fetchDischarge.R
-    depends: ["precip-data","matthew-sites"]
+    depends: ["precip-data","harvey-sites"]
     reader: rds
     refetch: TRUE
     comment: disabling refetch for now, re-enable to get updates to work
@@ -136,34 +136,34 @@ fetch:
     refetch: TRUE
     comment: disabling refetch for now, re-enable to get updates to work
   -
-    id: matthew-counties
-    location: cache/matthew-counties.rds
-    fetcher: matthew_counties
-    scripts: scripts/process/process.matthew_counties.R
+    id: harvey-counties
+    location: cache/harvey-counties.rds
+    fetcher: harvey_counties
+    scripts: scripts/process/process.harvey_counties.R
     reader: rds
     depends: "counties"
 process:
   -
-    id: matthew-states
-    location: cache/matthew-states.rds
-    processor: matthew_states
-    scripts: scripts/process/process.matthew_counties.R
+    id: harvey-states
+    location: cache/harvey-states.rds
+    processor: harvey_states
+    scripts: scripts/process/process.harvey_counties.R
     reader: rds
     depends: "states"
   -
-    id: matthew-borders
-    location: cache/matthew-borders.rds
-    processor: matthew_stateborders
-    scripts: scripts/process/process.matthew_counties.R
+    id: harvey-borders
+    location: cache/harvey-borders.rds
+    processor: harvey_stateborders
+    scripts: scripts/process/process.harvey_counties.R
     reader: rds
     depends: "states"
   -
     id: storm-track
     location: cache/storm-track.rds
-    processor: matthew_track
-    scripts: scripts/process/process.matthew_counties.R
+    processor: harvey_track
+    scripts: scripts/process/process.harvey_counties.R
     reader: rds
-    depends: ["matthew-track", "matthew-counties"]
+    depends: ["harvey-track", "harvey-counties"]
   -
     id: storm-location
     location: cache/storm-location.rds
@@ -171,7 +171,7 @@ process:
     start.date: "2017-08-25"
     end.date: "2017-08-30"
     reader: rds
-    depends: ["matthew-track", "matthew-counties"]  
+    depends: ["harvey-track", "harvey-counties"]  
   -
     id: precip-colors
     location: cache/precip-colors.json
@@ -200,14 +200,14 @@ process:
   - id: discharge-sparks
     location: cache/discharge-sparks.rds
     processor: discharge_sparks
-    scripts: scripts/process/process.matthew_counties.R
+    scripts: scripts/process/process.harvey_counties.R
     reader: rds
     depends: ["discharge-data","timesteps"]
   -
     id: timesteps
     location: cache/times.json
     processor: timesteps
-    scripts: scripts/process/process.matthew_counties.R
+    scripts: scripts/process/process.harvey_counties.R
     reader: json
     depends: "classifyBins"
     export: true
@@ -219,14 +219,14 @@ process:
       to either add a json publisher or, general data publisher so this ends up in data/times.json.
 visualize:
   -
-    id: matthew-map
-    location: figures/matthew-water.svg
-    visualizer: matthew_map
-    depends: ["matthew-counties","matthew-states", "storm-track", "classifyBins", 
-      'storm-location',"matthew-sites", "precip-colors", "precip-breaks", "discharge-sparks","matthew-borders", 
-      "non-matthew-sites"]
-    scripts: scripts/visualize/visualize.matthew_map.R
-    mapdata: "matthew-counties"
+    id: harvey-map
+    location: figures/harvey-water.svg
+    visualizer: harvey_map
+    depends: ["harvey-counties","harvey-states", "storm-track", "classifyBins", 
+      'storm-location',"harvey-sites", "precip-colors", "precip-breaks", "discharge-sparks","harvey-borders", 
+      "non-harvey-sites"]
+    scripts: scripts/visualize/visualize.harvey_map.R
+    mapdata: "harvey-counties"
     mimetype: image/svg+xml
     inline: true
     title: "Hurricane Harvey's impact on precipitation and streamflow"
@@ -235,7 +235,7 @@ visualize:
 publish:
   -
     id: thumbnail
-    location: images/matthew_water2.png
+    location: images/harvey_water2.png
     mimetype: image/png
     title: "thumbnail"
     alttext: "viz thumbnail"
@@ -275,7 +275,7 @@ publish:
     location: layout/js/animate.js
     mimetype: application/javascript
   -
-    id: matthew-page
+    id: harvey-page
     name: index
 
     publisher: page
@@ -291,10 +291,10 @@ publish:
     id: figure-section
     template: layout/templates/mapFigure.mustache
     publisher: section
-    depends: [ "matthew-map" ]
+    depends: [ "harvey-map" ]
     context:
       id: map-figure
-      figure: matthew-map
+      figure: harvey-map
       title: Hurricane Harvey’s Water Footprint
       line1: >-
         Hurricane Harvey approached the U.S. Gulf coast on August 25, 2017.
@@ -341,5 +341,5 @@ publish:
 
   -
     id: svg-css
-    location: layout/css/matthew-svg.css
+    location: layout/css/harvey-svg.css
     mimetype: text/css

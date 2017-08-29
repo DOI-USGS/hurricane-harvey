@@ -2,7 +2,7 @@
 
 /*IE SVG Width Fix*/
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){
-    #matthew-svg{
+    #harvey-svg{
       width:100%;
       height:608px;
     }
