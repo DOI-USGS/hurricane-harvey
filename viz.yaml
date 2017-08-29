@@ -97,7 +97,7 @@ fetch:
     id: precip-data
     fetcher: precip
     start.date: "2017-08-25"
-    end.date: "2017-08-28"
+    end.date: "2017-08-30"
     scripts: scripts/fetch/fetchPrecip.R
     location: cache/precip.csv
     mimetype: text/csv
@@ -156,7 +156,7 @@ process:
     location: cache/storm-location.rds
     processor: storm_location
     start.date: "2017-08-25"
-    end.date: "2017-08-27"
+    end.date: "2017-08-30"
     reader: rds
     depends: ["matthew-track", "matthew-counties"]  
   -
