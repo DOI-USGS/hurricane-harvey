@@ -279,7 +279,7 @@ process:
     id: lastUpdated
     processor: lastUpdated
     location: cache/process/lastUpdated.yaml
-    scripts: scripts/process/lastUpdated.R
+    scripts: scripts/process/process.lastUpdated.R
     depends:
       data: discharge-data
     mimetype: text/yaml
