@@ -1,7 +1,7 @@
 epsg_code <- '+init=epsg:3082' 
 
 
-process.matthew_counties <- function(viz){
+fetch.matthew_counties <- function(viz){
   library(rgeos)
   states <- c("TX")
 
@@ -60,7 +60,7 @@ process.matthew_track <- function(viz){
 # viz <- viz$process
 # viz <- viz[[which(unlist((lapply(viz, function(x) x$id == "matthew-sites"))))]]
 
-process.matthew_sites <- function(viz){
+fetch.matthew_sites <- function(viz){
   library(rgeos)
   library(sp)
   library(dplyr)

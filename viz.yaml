@@ -1,16 +1,16 @@
-vizlab: "0.1.7"
+vizlab: "0.1.4"
 info:
   id: hurricane-harvey
   name: Hurricane Harvey's Water Footprint
   date: 2017-08-28
   publish-date: 2017-08-28
   path: hurricane-harvey
-  analytics-id: UA-78530187-4
+  analytics-id: UA-78530187-7
   description: >-
     Hurricane Harvey approached the U.S. Gulf coast on August 26, 2017.
     This visualization shows the hurricane's impact on precipitation and streamflow.
   keywords: >-
-    water, hurricane, matthew, USGS, NOAA, VIZLAB, NWIS, flood, storm track
+    water, hurricane, matthew, USGS, NOAA, VIZLAB, NWIS, flood
   audience: General public
   url: https://owi.usgs.gov/vizlab/hurricane-harvey/
   thumbnail:    
@@ -63,7 +63,7 @@ fetch:
     reader: shp
     fetcher: counties
     scripts: scripts/fetch/fetch.counties.R
-    refetch: FALSE
+    refetch: TRUE
     mimetype: application/zip
   -
     id: states
@@ -104,6 +104,13 @@ fetch:
     refetch: true
     comment: disabling refetch to avoid too many GDP requests
   -
+    id: matthew-sites
+    location: cache/sites_geo.rds
+    fetcher: matthew_sites
+    scripts: scripts/process/process.matthew_counties.R
+    reader: rds
+    depends: ["sites-data","matthew-counties", "site_footy"]
+  -
     id: discharge-data
     fetcher: discharge
     location: cache/discharge.rds
@@ -122,14 +129,14 @@ fetch:
     reader: rds
     refetch: TRUE
     comment: disabling refetch for now, re-enable to get updates to work
-process:
   -
     id: matthew-counties
     location: cache/matthew-counties.rds
-    processor: matthew_counties
+    fetcher: matthew_counties
     scripts: scripts/process/process.matthew_counties.R
     reader: rds
     depends: "counties"
+process:
   -
     id: matthew-states
     location: cache/matthew-states.rds
@@ -190,13 +197,6 @@ process:
     scripts: scripts/process/process.matthew_counties.R
     reader: rds
     depends: ["discharge-data","timesteps"]
-  -
-    id: matthew-sites
-    location: cache/sites_geo.rds
-    processor: matthew_sites
-    scripts: scripts/process/process.matthew_counties.R
-    reader: rds
-    depends: ["sites-data","matthew-counties", "site_footy"]
   -
     id: timesteps
     location: cache/times.json
@@ -270,7 +270,7 @@ publish:
   -
     id: matthew-page
     name: index
-    template: fullpage
+    template: "/Library/Frameworks/R.framework/Versions/3.4/Resources/library/vizlab/templates/fullPage.mustache"
     publisher: page
     depends: ["header-section", "figure-section", "data-sources", "map-figure-css", 
       "header-footer-css", "precip-colors", "timesteps", "jquery-js", "animate-js",
@@ -309,7 +309,7 @@ publish:
       id: header
       title: Hurricane Harvey's Water Footprint
       logo: usgs-logo
-      caption: Water impacts from Hurricane Harvey
+      caption: Water impacts from Harvey Matthew
   -
     id: data-sources
     template: layout/templates/dataSources.mustache
@@ -330,7 +330,7 @@ publish:
       line7: "Storm Track: National Oceanic and Atmospheric Administration National Hurricane Center Preliminary Best Track for Hurricane Matthew ("
       nhcLink: http://www.nhc.noaa.gov/gis/
       line8: )
-  
+
   -
     id: svg-css
     location: layout/css/matthew-svg.css
