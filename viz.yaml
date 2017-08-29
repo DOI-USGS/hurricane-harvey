@@ -375,7 +375,7 @@ publish:
       id: header
       title: Hurricane Harvey's Water Footprint
       logo: usgs-logo
-      caption: Water impacts from Harvey Matthew
+      caption: Water impacts from Hurricane Harvey
   -
     id: data-sources
     template: layout/templates/dataSources.mustache
