@@ -82,6 +82,22 @@ fetch.matthew_sites <- function(viz=as.viz("matthew-sites")){
   saveRDS(sites[overlap, ], viz[['location']])
 }
 
+fetch.non_matthew_sites <- function(viz=as.viz("non-matthew-sites")){
+  library(rgeos)
+  library(sp)
+  library(dplyr)
+  sites <- readData(viz[['depends']][1])
+  matthew.sites <- readData(viz[['depends']][2])
+  sites <- filter(sites, !site_no %in% matthew.sites$site_no)
+  pts <- cbind(sites$dec_long_va, sites$dec_lat_va)
+  sites <- SpatialPointsDataFrame(pts, proj4string=CRS("+proj=longlat +datum=WGS84"), 
+                                  data = sites %>% select(site_no, station_nm) %>% data.frame)
+  sites <- spTransform(sites, CRS(proj4string(matthew.sites)))
+  
+  saveRDS(sites, viz[['location']])
+}
+
+
 process.timesteps <- function(viz){
   #"classifyBins",'storm-location'
   library(dplyr)
