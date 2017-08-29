@@ -7,10 +7,11 @@ info:
   path: hurricane-harvey
   analytics-id: UA-78530187-7
   description: >-
-    Hurricane Harvey approached the U.S. Gulf coast on August 26, 2017.
+    Hurricane Harvey approached the U.S. Gulf coast on August 25, 2017.
     This visualization shows the hurricane's impact on precipitation and streamflow.
   keywords: >-
     water, hurricane, harvey, USGS, NOAA, VIZLAB, NWIS, flood
+
   audience: General public
   url: https://owi.usgs.gov/vizlab/hurricane-harvey/
   thumbnail:    
@@ -282,6 +283,7 @@ publish:
   -
     id: matthew-page
     name: index
+
     publisher: page
     template: fullpage
     depends: ["header-section", "figure-section", "data-sources", "map-figure-css", 
@@ -301,7 +303,7 @@ publish:
       figure: matthew-map
       title: Hurricane Harvey’s Water Footprint
       line1: >-
-        Hurricane Harvey approached the U.S. Gulf coast on August 26,2017.
+        Hurricane Harvey approached the U.S. Gulf coast on August 25, 2017.
         In the map above, the hurricane’s impact on precipitation and streamflow are 
         shown. Normalized discharge (cubic feet per second) 
         at a selection of US Geological Survey gaging stations within ~200 km of the eye of the hurricane is shown 
@@ -310,7 +312,7 @@ publish:
         which can impact the effect of precipitation on flow. Gages shown do not 
         include the US Geological Survey Short-Term Network gages deployed to capture 
         more detailed effects of the hurricane ( 
-      line2: "http://stn.wim.usgs.gov/fev/#MatthewOctober2016"
+      line2: "http://stn.wim.usgs.gov/FEV/#HarveyAug2017"
       line3: ). 
   -
     id: header-section
@@ -332,14 +334,14 @@ publish:
       line1: "Streamflow: U.S. Geological Survey National Water Information System ("
       waterDataLink: http://waterdata.usgs.gov/nwis
       line2: >-
-        ). Time series of discharge at selected gages within ~200 km of the eye of the storm are shown through time, 
+        ). Time series of discharge at selected gages impacted by the storm are shown through time, 
         ordered by latitude and normalized to site-specific maximum discharge observed over the duration of the hurricane. 
       line4: "Precipitation: National Weather Service Environmental Modeling Center National Center for Environmental Prediction Stage IV precipitation analysis ("
       emcLink: http://www.emc.ncep.noaa.gov/mmb/ylin/pcpanl/stage4/
       line5: ), aggregated according to Blodgett (2013, 
       pubsLink: http://pubs.usgs.gov/fs/2013/3035/pdf/fs2013-3035.pdf
       line6: )
-      line7: "Storm Track: National Oceanic and Atmospheric Administration National Hurricane Center Preliminary Best Track for Hurricane Matthew ("
+      line7: "Storm Track: National Oceanic and Atmospheric Administration National Hurricane Center Preliminary Best Track for Hurricane Harvey ("
       nhcLink: http://www.nhc.noaa.gov/gis/
       line8: )
 
