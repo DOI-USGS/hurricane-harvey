@@ -275,6 +275,15 @@ process:
       export true allows it to be exported to target, 
       mimetype javascript is a hack to use a publisher that works, we should be able
       to either add a json publisher or, general data publisher so this ends up in data/times.json.
+  -
+    id: lastUpdated
+    processor: lastUpdated
+    location: cache/process/lastUpdated.yaml
+    scripts: scripts/process/lastUpdated.R
+    depends:
+      data: discharge-data
+    mimetype: text/yaml
+    reader: md # need a better plain text reader
 visualize:
   -
     id: harvey-map
@@ -289,7 +298,6 @@ visualize:
     inline: true
     title: "Hurricane Harvey's impact on precipitation and streamflow"
     alttext: "Map of Hurricane Harvey's water footprint"
-    
 publish:
   -
     id: thumbnail
@@ -335,13 +343,13 @@ publish:
   -
     id: harvey-page
     name: index
-
     publisher: page
     template: fullpage
-    depends: ["header-section", "figure-section", "data-sources", "map-figure-css", 
+    depends: ["footer","header-section", "figure-section", "data-sources", "map-figure-css", 
       "header-footer-css", "precip-colors", "timesteps", "jquery-js", "animate-js",
       "svg-css","thumbnail", "vizlab-favicon"]
     context:
+      footer: footer
       resources: ["map-figure-css","header-footer-css", "jquery-js", "animate-js", "svg-css",
         "<link rel=\"icon\" type=\"image/ico\" href=\"images/favicon.ico\"/>"]
       sections: [ "header-section", "figure-section", "data-sources"]
@@ -376,6 +384,14 @@ publish:
       title: Hurricane Harvey's Water Footprint
       logo: usgs-logo
       caption: Water impacts from Hurricane Harvey
+  -
+    id: footer
+    publisher: section
+    template: layout/templates/footer.mustache
+    depends: ["usgs-logo","lastUpdated"]
+    context:
+      id: footer
+      logo: usgs-logo
   -
     id: data-sources
     template: layout/templates/dataSources.mustache
