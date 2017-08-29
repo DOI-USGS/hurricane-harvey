@@ -1,16 +1,17 @@
-vizlab: "0.1.4"
+vizlab: "0.1.7"
 info:
   id: hurricane-harvey
   name: Hurricane Harvey's Water Footprint
   date: 2017-08-28
   publish-date: 2017-08-28
   path: hurricane-harvey
-  analytics-id: UA-78530187-4
+  analytics-id: UA-78530187-7
   description: >-
     Hurricane Harvey approached the U.S. Gulf coast on August 25, 2017.
     This visualization shows the hurricane's impact on precipitation and streamflow.
   keywords: >-
-    water, hurricane, harvey, USGS, NOAA, VIZLAB, NWIS, flood, storm track
+    water, hurricane, harvey, USGS, NOAA, VIZLAB, NWIS, flood
+
   audience: General public
   url: https://owi.usgs.gov/vizlab/hurricane-harvey/
   thumbnail:    
@@ -63,7 +64,7 @@ fetch:
     reader: shp
     fetcher: counties
     scripts: scripts/fetch/fetch.counties.R
-    refetch: FALSE
+    refetch: TRUE
     mimetype: application/zip
   -
     id: states
@@ -72,13 +73,6 @@ fetch:
     fetcher: states
     scripts: scripts/fetch/fetch.counties.R
     refetch: FALSE
-    mimetype: application/zip
-  -
-    id: site_footy
-    location: cache/Harvey_footy.zip
-    reader: shp
-    fetcher: site_footy
-    scripts: scripts/fetch/fetch.counties.R
     mimetype: application/zip
   -
     id: matthew-track
@@ -97,12 +91,31 @@ fetch:
     id: precip-data
     fetcher: precip
     start.date: "2017-08-25"
-    end.date: "2017-08-28"
+    end.date: "2017-08-30"
     scripts: scripts/fetch/fetchPrecip.R
     location: cache/precip.csv
     mimetype: text/csv
     refetch: true
     comment: disabling refetch to avoid too many GDP requests
+  -
+    id: site_footy
+    location: data/Harvey_footy.zip
+    mimetype: application/zip
+    reader: shp
+  -
+    id: matthew-sites
+    location: cache/sites_geo.rds
+    fetcher: matthew_sites
+    scripts: scripts/process/process.matthew_counties.R
+    reader: rds
+    depends: ["sites-data","matthew-counties", "site_footy"]
+  -
+    id: non-matthew-sites
+    location: cache/non_sites_geo.rds
+    fetcher: non_matthew_sites
+    scripts: scripts/process/process.matthew_counties.R
+    reader: rds
+    depends: ["sites-data","matthew-sites"]
   -
     id: discharge-data
     fetcher: discharge
@@ -122,14 +135,14 @@ fetch:
     reader: rds
     refetch: TRUE
     comment: disabling refetch for now, re-enable to get updates to work
-process:
   -
     id: matthew-counties
     location: cache/matthew-counties.rds
-    processor: matthew_counties
+    fetcher: matthew_counties
     scripts: scripts/process/process.matthew_counties.R
     reader: rds
     depends: "counties"
+process:
   -
     id: matthew-states
     location: cache/matthew-states.rds
@@ -156,7 +169,7 @@ process:
     location: cache/storm-location.rds
     processor: storm_location
     start.date: "2017-08-25"
-    end.date: "2017-08-27"
+    end.date: "2017-08-30"
     reader: rds
     depends: ["matthew-track", "matthew-counties"]  
   -
@@ -191,13 +204,6 @@ process:
     reader: rds
     depends: ["discharge-data","timesteps"]
   -
-    id: matthew-sites
-    location: cache/sites_geo.rds
-    processor: matthew_sites
-    scripts: scripts/process/process.matthew_counties.R
-    reader: rds
-    depends: ["sites-data","matthew-counties", "site_footy"]
-  -
     id: timesteps
     location: cache/times.json
     processor: timesteps
@@ -217,7 +223,8 @@ visualize:
     location: figures/matthew-water.svg
     visualizer: matthew_map
     depends: ["matthew-counties","matthew-states", "storm-track", "classifyBins", 
-      'storm-location',"matthew-sites", "precip-colors", "precip-breaks", "discharge-sparks","matthew-borders"]
+      'storm-location',"matthew-sites", "precip-colors", "precip-breaks", "discharge-sparks","matthew-borders", 
+      "non-matthew-sites"]
     scripts: scripts/visualize/visualize.matthew_map.R
     mapdata: "matthew-counties"
     mimetype: image/svg+xml
@@ -270,8 +277,9 @@ publish:
   -
     id: matthew-page
     name: index
-    template: "/Library/Frameworks/R.framework/Versions/3.4/Resources/library/vizlab/templates/fullPage.mustache"
+
     publisher: page
+    template: fullpage
     depends: ["header-section", "figure-section", "data-sources", "map-figure-css", 
       "header-footer-css", "precip-colors", "timesteps", "jquery-js", "animate-js",
       "svg-css","thumbnail", "vizlab-favicon"]
@@ -330,7 +338,7 @@ publish:
       line7: "Storm Track: National Oceanic and Atmospheric Administration National Hurricane Center Preliminary Best Track for Hurricane Harvey ("
       nhcLink: http://www.nhc.noaa.gov/gis/
       line8: )
-  
+
   -
     id: svg-css
     location: layout/css/matthew-svg.css

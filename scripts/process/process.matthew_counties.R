@@ -1,7 +1,7 @@
 epsg_code <- '+init=epsg:3082' 
 
 
-process.matthew_counties <- function(viz){
+fetch.matthew_counties <- function(viz){
   library(rgeos)
   states <- c("TX")
 
@@ -60,11 +60,11 @@ process.matthew_track <- function(viz){
 # viz <- viz$process
 # viz <- viz[[which(unlist((lapply(viz, function(x) x$id == "matthew-sites"))))]]
 
-process.matthew_sites <- function(viz){
+fetch.matthew_sites <- function(viz=as.viz("matthew-sites")){
   library(rgeos)
   library(sp)
   library(dplyr)
-  ignore.sites <- c('08041780', '08211503', '08028500') # sites that hydropeak or are otherwise not representative
+  ignore.sites <- c('08041780', '08211503', '08028500', '08067070') # sites that hydropeak or are otherwise not representative
   counties <- readData(viz[['depends']][2])
   sites <- readData(viz[['depends']][1]) %>% 
     filter(!site_no %in% ignore.sites) %>% 
@@ -82,6 +82,22 @@ process.matthew_sites <- function(viz){
   saveRDS(sites[overlap, ], viz[['location']])
 }
 
+fetch.non_matthew_sites <- function(viz=as.viz("non-matthew-sites")){
+  library(rgeos)
+  library(sp)
+  library(dplyr)
+  sites <- readData(viz[['depends']][1])
+  matthew.sites <- readData(viz[['depends']][2])
+  sites <- filter(sites, !site_no %in% matthew.sites$site_no)
+  pts <- cbind(sites$dec_long_va, sites$dec_lat_va)
+  sites <- SpatialPointsDataFrame(pts, proj4string=CRS("+proj=longlat +datum=WGS84"), 
+                                  data = sites %>% select(site_no, station_nm) %>% data.frame)
+  sites <- spTransform(sites, CRS(proj4string(matthew.sites)))
+  
+  saveRDS(sites, viz[['location']])
+}
+
+
 process.timesteps <- function(viz){
   #"classifyBins",'storm-location'
   library(dplyr)
@@ -97,7 +113,7 @@ grab_spark <- function(vals){
   x = svglite::xmlSVG({
     par(omi=c(0,0,0,0), mai=c(0,0,0,0))
     plot(vals, type='l', axes=F, ann=F)
-  }, height=0.2, width=2)
+  }, height=0.4, width=2)
   xml2::xml_attr(xml2::xml_find_first(x, '//*[local-name()="polyline"]'),'points')
 }
 
@@ -130,8 +146,9 @@ process.storm_location <- function(viz){
     as.POSIXct(sprintf('%s-%s-%s %s', YEAR, MONTH, DAY, HHMM), format='%Y-%m-%d %H%M', tz="America/New_York")
   }
   
-  dbf.file <- file.path(shp.path, 'AL092017_pts.dbf')
-  shp.data <- foreign::read.dbf(dbf.file) %>% 
+  warning('NWS file pattern is hard-coded here and is storm-specific')
+  
+  shp.data <- rgdal::readOGR(shp.path, layer = 'AL092017_pts') %>% data.frame %>% 
     filter(STORMNAME=="HARVEY") %>% 
     mutate(DateTime = as.time(YEAR, MONTH, DAY, HHMM)) %>% 
     select(LAT, LON, DateTime, INTENSITY)
