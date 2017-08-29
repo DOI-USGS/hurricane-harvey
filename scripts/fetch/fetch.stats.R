@@ -1,7 +1,6 @@
 
 fetch.stats <- function(viz){
   library(dataRetrieval)
-  library(lubridate)
   library(dplyr)
   required <- c("depends", "location")
   checkRequired(viz, required)

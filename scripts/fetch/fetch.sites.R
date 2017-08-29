@@ -21,7 +21,7 @@ fetch.sites <- function(viz){
                         !site_tp_cd %in% c("LK", "ES", "GW")) %>% #others?
       mutate(end_date = as.Date(end_date)) %>%
       filter(end_date >= start.date,
-             count_nu >= 3000,
+             count_nu >= 300,
              !(is.na(alt_datum_cd))) %>%
       select(site_no, station_nm, dec_lat_va, dec_long_va) %>%
       data.frame() 
