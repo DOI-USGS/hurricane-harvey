@@ -1,7 +1,7 @@
 epsg_code <- '+init=epsg:3082' 
 
 
-fetch.matthew_counties <- function(viz){
+fetch.harvey_counties <- function(viz){
   library(rgeos)
   states <- c("TX")
 
@@ -18,7 +18,7 @@ fetch.matthew_counties <- function(viz){
 
 
 
-process.matthew_states <- function(viz){
+process.harvey_states <- function(viz){
   library(rgeos)
   library(sp)
   use.states <- c("texas")
@@ -31,7 +31,7 @@ process.matthew_states <- function(viz){
   saveRDS(states, viz[['location']])
 }
 
-process.matthew_stateborders <- function(viz){
+process.harvey_stateborders <- function(viz){
   library(rgeos)
   library(sp)
   include.states <- c("texas")
@@ -43,7 +43,7 @@ process.matthew_stateborders <- function(viz){
   saveRDS(states, viz[['location']])
 }
 
-process.matthew_track <- function(viz){
+process.harvey_track <- function(viz){
   library(rgeos)
   library(sp)
   
@@ -58,9 +58,9 @@ process.matthew_track <- function(viz){
 
 # viz <- yaml.load_file("viz.yaml")
 # viz <- viz$process
-# viz <- viz[[which(unlist((lapply(viz, function(x) x$id == "matthew-sites"))))]]
+# viz <- viz[[which(unlist((lapply(viz, function(x) x$id == "harvey-sites"))))]]
 
-fetch.matthew_sites <- function(viz=as.viz("matthew-sites")){
+fetch.harvey_sites <- function(viz=as.viz("harvey-sites")){
   library(rgeos)
   library(sp)
   library(dplyr)
@@ -82,17 +82,17 @@ fetch.matthew_sites <- function(viz=as.viz("matthew-sites")){
   saveRDS(sites[overlap, ], viz[['location']])
 }
 
-fetch.non_matthew_sites <- function(viz=as.viz("non-matthew-sites")){
+fetch.non_harvey_sites <- function(viz=as.viz("non-harvey-sites")){
   library(rgeos)
   library(sp)
   library(dplyr)
   sites <- readData(viz[['depends']][1])
-  matthew.sites <- readData(viz[['depends']][2])
-  sites <- filter(sites, !site_no %in% matthew.sites$site_no)
+  harvey.sites <- readData(viz[['depends']][2])
+  sites <- filter(sites, !site_no %in% harvey.sites$site_no)
   pts <- cbind(sites$dec_long_va, sites$dec_lat_va)
   sites <- SpatialPointsDataFrame(pts, proj4string=CRS("+proj=longlat +datum=WGS84"), 
                                   data = sites %>% select(site_no, station_nm) %>% data.frame)
-  sites <- spTransform(sites, CRS(proj4string(matthew.sites)))
+  sites <- spTransform(sites, CRS(proj4string(harvey.sites)))
   
   saveRDS(sites, viz[['location']])
 }
@@ -140,7 +140,7 @@ process.storm_location <- function(viz){
   if (!dir.exists(shp.path)){
     dir.create(shp.path)
   }
-  unzip('cache/matthew.zip', exdir = shp.path)
+  unzip('cache/harvey.zip', exdir = shp.path)
   
   as.time <- function(YEAR, MONTH, DAY, HHMM){
     as.POSIXct(sprintf('%s-%s-%s %s', YEAR, MONTH, DAY, HHMM), format='%Y-%m-%d %H%M', tz="America/New_York")

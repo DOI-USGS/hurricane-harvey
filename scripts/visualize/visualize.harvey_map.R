@@ -1,8 +1,8 @@
 # viz <- yaml.load_file("viz.yaml")
 # viz <- viz$visualize
-# viz <- viz[[which(unlist((lapply(viz, function(x) x$id == "matthew-map"))))]]
+# viz <- viz[[which(unlist((lapply(viz, function(x) x$id == "harvey-map"))))]]
 
-visualize.matthew_map <- function(viz = as.viz("matthew-map")){
+visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   
   counties <- readData(viz[['depends']][1])
   states <- readData(viz[['depends']][2])
@@ -14,7 +14,7 @@ visualize.matthew_map <- function(viz = as.viz("matthew-map")){
   legend.breaks <- readData(viz[['depends']][8])
   spark.sites <- readData(viz[['depends']][9])
   state.borders <- readData(viz[['depends']][10])
-  non.matthew.gages <- readData(viz[['depends']][11])
+  non.harvey.gages <- readData(viz[['depends']][11])
   library(svglite)
   library(dplyr)
   
@@ -36,12 +36,12 @@ visualize.matthew_map <- function(viz = as.viz("matthew-map")){
   
   svg.addons <- svglite::xmlSVG(width = 10, height = 8, {
     set.plot()
-    sp::plot(non.matthew.gages, pch=20, add=TRUE) # doing this because we are coding based on counting numbers of circles...
+    sp::plot(non.harvey.gages, pch=20, add=TRUE) # doing this because we are coding based on counting numbers of circles...
   })
   library(xml2)
   # let this thing scale:
   xml_attr(svg, "preserveAspectRatio") <- "xMidYMid meet" 
-  xml_attr(svg, "id") <- "matthew-svg"
+  xml_attr(svg, "id") <- "harvey-svg"
   
   vb <- strsplit(xml_attr(svg, 'viewBox'),'[ ]')[[1]]
   r <- xml_find_all(svg, '//*[local-name()="rect"]')
@@ -152,14 +152,14 @@ visualize.matthew_map <- function(viz = as.viz("matthew-map")){
   }
   
   non.cr <- xml_find_all(svg.addons, '//*[local-name()="circle"]')
-  if (length(non.cr) != length(non.matthew.gages)){
+  if (length(non.cr) != length(non.harvey.gages)){
     stop('the count of non storm gages on the map doesnt match the count of named gages.')
   }
-  for (i in 1:length(non.matthew.gages)){ 
+  for (i in 1:length(non.harvey.gages)){ 
     xml_add_child(g.storm, 'circle', cx = xml_attr(non.cr[i], 'cx'), cy = xml_attr(non.cr[i], 'cy'), 
                   class='nwis-inactive',
-                  onclick=sprintf("openNWIS('%s')", non.matthew.gages[i,]$site_no), 
-                  onmousemove=sprintf("hovertext('USGS %s',evt);", non.matthew.gages[i,]$site_no),
+                  onclick=sprintf("openNWIS('%s')", non.harvey.gages[i,]$site_no), 
+                  onmousemove=sprintf("hovertext('USGS %s',evt);", non.harvey.gages[i,]$site_no),
                   onmouseout=sprintf("hovertext(' ');"),
                   r='1.5')
   }
