@@ -15,9 +15,9 @@ info:
   audience: General public
   url: https://owi.usgs.gov/vizlab/hurricane-harvey/
   thumbnail:    
-    url: https://owi.usgs.gov/vizlab/hurricane-harvey/images/harvey_water2.png
-    width: 1124
-    height: 912
+    url: https://owi.usgs.gov/vizlab/hurricane-harvey/images/harvey1.png
+    width: 774
+    height: 620
     type: image/png
     alttext: Hurricane Harvey
   thumbnail-landing:
