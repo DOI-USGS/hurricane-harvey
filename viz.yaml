@@ -346,16 +346,23 @@ publish:
     mimetype: text/css
     publisher: resource
   -
+    id: timesteps_pub
+    relpath: "cache/times.json"
+    publisher: json
+    scripts: scripts/publish/json.R
+    mimetype: application/json
+  -
     id: harvey-page
     name: index
     publisher: page
     template: fullpage
+    scripts: scripts/publish/json.R
     depends: ["footer","footerCSS","header-section", "figure-section", "data-sources", "map-figure-css", 
-      "header-footer-css", "precip-colors", "timesteps", "jquery-js", "animate-js",
+      "header-footer-css", "precip-colors", "timesteps_pub", "jquery-js", "animate-js",
       "svg-css","thumbnail", "vizlab-favicon"]
     context:
       footer: footer
-      resources: ["map-figure-css","header-footer-css","footerCSS", "jquery-js", "animate-js", "svg-css",
+      resources: ["map-figure-css","header-footer-css","footerCSS","timesteps_pub", "jquery-js", "animate-js", "svg-css",
         "<link rel=\"icon\" type=\"image/ico\" href=\"images/favicon.ico\"/>"]
       sections: [ "header-section", "figure-section", "data-sources"]
   -
@@ -369,7 +376,7 @@ publish:
       title: Hurricane Harvey’s Water Footprint
       line1: >-
         Hurricane Harvey approached the U.S. Gulf coast on August 25, 2017.
-        In the map above, the hurricane’s impact on precipitation and streamflow are 
+        In the map above, the hurricane's impact on precipitation and streamflow are 
         shown. Normalized discharge (cubic feet per second) 
         at a selection of US Geological Survey gaging stations impacted by the hurricane is shown 
         in the right panel. Variation in the shape of the hydrographs (right panel) 
