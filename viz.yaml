@@ -402,10 +402,10 @@ publish:
     template: layout/templates/footer.mustache
     depends:
       usgs-logo: usgs-logo
-      lastUpdated: lastUpdated_pub
+      lastUpdated: lastUpdated
     context:
       usgs-logo: usgs-logo
-      lastUpdated: lastUpdated_pub
+      lastUpdated: lastUpdated
   -
     id: data-sources
     template: layout/templates/dataSources.mustache
