@@ -347,11 +347,10 @@ publish:
     publisher: resource
   -
     id: timesteps_pub
-    relpath: cache/times.json
+    relpath: times.json
     publisher: json
     scripts: scripts/publish/json.R
     mimetype: application/json
-    location: "layout/js/times.json"
   -
     id: harvey-page
     name: index
