@@ -363,8 +363,8 @@ publish:
     context:
       footer: footer
       resources: ["map-figure-css","header-footer-css","footerCSS","timesteps_pub", "jquery-js", "animate-js", "svg-css",
-        "<link rel=\"icon\" type=\"image/ico\" href=\"images/favicon.ico\"/>"]
-      sections: [ "header-section", "figure-section", "data-sources","timesteps"]
+        "<link rel=\"icon\" type=\"image/ico\" href=\"images/favicon.ico\"/>","timesteps"]
+      sections: [ "header-section", "figure-section", "data-sources"]
   -
     id: figure-section
     template: layout/templates/mapFigure.mustache
