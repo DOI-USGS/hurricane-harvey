@@ -283,7 +283,7 @@ process:
     depends:
       data: discharge-data
     mimetype: text/yaml
-    reader: md # need a better plain text reader
+    reader: md
 visualize:
   -
     id: harvey-map
@@ -400,10 +400,12 @@ publish:
     id: footer
     publisher: section
     template: layout/templates/footer.mustache
-    depends: ["usgs-logo","lastUpdated"]
-    context:
-      id: footer
+    depends:
       usgs-logo: usgs-logo
+      lastUpdated: lastUpdated_pub
+    context:
+      usgs-logo: usgs-logo
+      lastUpdated: lastUpdated_pub
   -
     id: data-sources
     template: layout/templates/dataSources.mustache
