@@ -347,7 +347,7 @@ publish:
     publisher: resource
   -
     id: timesteps_pub
-    relpath: times.json
+    relpath: js/times.json
     publisher: json
     scripts: scripts/publish/json.R
     mimetype: application/json
