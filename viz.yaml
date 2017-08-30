@@ -351,6 +351,7 @@ publish:
     publisher: json
     scripts: scripts/publish/json.R
     mimetype: application/json
+    location: "layout/js/times.json"
   -
     id: harvey-page
     name: index
