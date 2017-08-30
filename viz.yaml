@@ -347,7 +347,7 @@ publish:
     publisher: resource
   -
     id: timesteps_pub
-    relpath: "cache/times.json"
+    relpath: cache/times.json
     publisher: json
     scripts: scripts/publish/json.R
     mimetype: application/json
@@ -358,13 +358,13 @@ publish:
     template: fullpage
     scripts: scripts/publish/json.R
     depends: ["footer","footerCSS","header-section", "figure-section", "data-sources", "map-figure-css", 
-      "header-footer-css", "precip-colors", "timesteps_pub", "jquery-js", "animate-js",
+      "header-footer-css", "precip-colors", "timesteps_pub", "jquery-js", "animate-js", "timesteps",
       "svg-css","thumbnail", "vizlab-favicon"]
     context:
       footer: footer
       resources: ["map-figure-css","header-footer-css","footerCSS","timesteps_pub", "jquery-js", "animate-js", "svg-css",
         "<link rel=\"icon\" type=\"image/ico\" href=\"images/favicon.ico\"/>"]
-      sections: [ "header-section", "figure-section", "data-sources"]
+      sections: [ "header-section", "figure-section", "data-sources","timesteps"]
   -
     id: figure-section
     template: layout/templates/mapFigure.mustache
