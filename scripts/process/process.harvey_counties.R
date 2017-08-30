@@ -106,6 +106,7 @@ process.timesteps <- function(viz){
     unique() %>% .$DateTime %>% as.POSIXct %>% format('%b %d %I:%M %p')
   cat(jsonlite::toJSON(list(times=times)), file = viz[['location']])
 }
+
 library(svglite)
 library(xml2)
 grab_spark <- function(vals){
