@@ -37,7 +37,7 @@ fetch.precip <- function(viz){
   endDate <- as.POSIXct(paste(viz[["end.date"]],"22:00:00"), tz="America/New_York")
   attr(startDate, 'tzone') <- "UTC"
   
-  states <- c("texas")
+  states <- c("texas", "louisiana")
   
   precip <- getPrecip(states, startDate, endDate)
   attr(precip$DateTime, 'tzone') <- "America/New_York" #back to eastern
