@@ -29,6 +29,9 @@ info:
       version: 0.1.8
       name: USGS-VIZLAB/vizlab
       ref: v0.1.8
+    raster:
+      repo: CRAN
+      version: 2.5.8
     dplyr: 
       repo: CRAN
       version: 0.7.2

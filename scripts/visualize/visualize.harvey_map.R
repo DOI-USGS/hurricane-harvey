@@ -33,10 +33,12 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
     sp::plot(gages, pch=20, add=TRUE)
     sp::plot(storm, pch=20, add=TRUE)
   })
-  
+  library(raster)
+  library(rgeos)
   svg.addons <- svglite::xmlSVG(width = 10, height = 8, {
     set.plot()
-    sp::plot(non.harvey.gages, pch=20, add=TRUE) # doing this because we are coding based on counting numbers of circles...
+    clipped.nons <<- rgeos::gIntersection(non.harvey.gages, as(extent(as.vector(t(par("usr")))), "SpatialPolygons"), byid = T)
+    sp::plot(clipped.nons, pch=20, add=TRUE) # doing this because we are coding based on counting numbers of circles...
   })
   library(xml2)
   # let this thing scale:
@@ -153,10 +155,10 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   }
   
   non.cr <- xml_find_all(svg.addons, '//*[local-name()="circle"]')
-  # if (length(non.cr) != length(non.harvey.gages)){
-  #   stop('the count of non storm gages on the map doesnt match the count of named gages.')
-  # }
-  # removing the js code from the inactive ones, so no need to match info
+  if (length(non.cr) != length(non.harvey.gages)){
+    stop('the count of non storm gages on the map doesnt match the count of named gages.')
+  }
+  #removing the js code from the inactive ones, so no need to match info
   for (i in 1:length(non.cr)){ 
     xml_add_child(g.storm, 'circle', cx = xml_attr(non.cr[i], 'cx'), cy = xml_attr(non.cr[i], 'cy'), 
                   class='nwis-inactive', r='1.5')
