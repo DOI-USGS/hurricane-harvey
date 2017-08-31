@@ -1,17 +1,27 @@
 epsg_code <- '+init=epsg:3082' 
 
 
-fetch.harvey_counties <- function(viz){
+fetch.harvey_counties <- function(viz = as.viz('harvey-counties')){
   library(rgeos)
-  states <- c("TX")
+  library(dplyr)
+  states <- viz[['states']]
 
-  counties <- readData(viz[['depends']])
+  counties <- readData(viz[['depends']][1])
   counties <- counties[counties$STATE %in% states, ]
   FIPs <- as.character(counties$FIPS)
   countyName <- paste0(as.character(counties$COUNTY),', ', as.character(counties$STATE))
   counties <- rgeos::gSimplify(counties, 0.001)
+  
+  footy <- readData(viz[['depends']][2]) %>% spTransform(CRS(epsg_code)) %>% 
+    gBuffer(width=200000, byid=TRUE )
   counties <- spTransform(counties, CRS(epsg_code))
-  counties <- SpatialPolygonsDataFrame(counties, data = data.frame(FIPS=FIPs, countyName = countyName), match.ID = FALSE)
+  overlap <- gContains(footy, counties, byid = TRUE) %>% rowSums() %>% as.logical()
+  
+  
+  
+  counties <- SpatialPolygonsDataFrame(counties[overlap, ], 
+                                       data = data.frame(FIPS=FIPs[overlap], countyName = countyName[overlap]), 
+                                       match.ID = FALSE)
   saveRDS(counties, viz[['location']])
 }
 
@@ -21,10 +31,10 @@ fetch.harvey_counties <- function(viz){
 process.harvey_states <- function(viz){
   library(rgeos)
   library(sp)
-  use.states <- c("texas")
+  
   
   states <- readData(viz[['depends']])
-  states <- states[!names(states) %in% use.states, ] 
+  
   states <- rgeos::gSimplify(states, 0.01)
   states <- sp::spTransform(states, CRS(epsg_code))
   
@@ -34,7 +44,7 @@ process.harvey_states <- function(viz){
 process.harvey_stateborders <- function(viz){
   library(rgeos)
   library(sp)
-  include.states <- c("texas")
+  include.states <- c("texas", "louisiana")
   states <- readData(viz[['depends']])
   states <- states[names(states) %in% include.states, ]
   states <- rgeos::gSimplify(states, 0.01)
