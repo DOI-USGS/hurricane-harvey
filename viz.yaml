@@ -16,12 +16,12 @@ info:
   url: https://owi.usgs.gov/vizlab/hurricane-harvey/
   thumbnail:    
     url: https://owi.usgs.gov/vizlab/hurricane-harvey/images/harvey1.png
-    width: 774
-    height: 620
+    width: 955
+    height: 765
     type: image/png
     alttext: Hurricane Harvey
   thumbnail-landing:
-    url: images/harvey_water2.png
+    url: images/harvey1.png
     alttext: Hurricane Harvey
   required-packages:
     vizlab:
@@ -305,7 +305,7 @@ visualize:
 publish:
   -
     id: thumbnail
-    location: images/harvey_water2.png
+    location: images/harvey1.png
     mimetype: image/png
     title: "thumbnail"
     alttext: "viz thumbnail"
