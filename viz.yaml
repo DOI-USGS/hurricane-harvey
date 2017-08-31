@@ -301,7 +301,7 @@ visualize:
 publish:
   -
     id: thumbnail
-    location: images/harvey_water2.png
+    location: images/harvey1.png
     mimetype: image/png
     title: "thumbnail"
     alttext: "viz thumbnail"
