@@ -55,8 +55,10 @@ var playPause = function() {
     clearInterval(interval);
     running = false;
     button.html("Play");
+    ga('send', 'event', 'figure', 'user pressed pause');
   } else {
     running = true;
+    ga('send', 'event', 'figure', 'user pressed play');
     button.html("Pause")
     interval = setInterval(function() {
       if (timestep < prcpTimes.times.length) {
@@ -130,7 +132,7 @@ function openNWIS(id, event){
  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
    event.stopPropagation();
 }else{
-  window.open('http://waterdata.usgs.gov/nwis/uv?site_no='+id,'_blank');
+   vizlab.clicklink('http://waterdata.usgs.gov/nwis/uv?site_no='+id,'_blank');
   }
   
 }
