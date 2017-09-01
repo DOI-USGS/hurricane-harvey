@@ -15,11 +15,8 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   spark.sites <- readData(viz[['depends']][9])
   state.borders <- readData(viz[['depends']][10])
   non.harvey.gages <- readData(viz[['depends']][11])
-  houston <- readData(viz[['depends']][12])
   library(svglite)
   library(dplyr)
-  
-  add.houston <- FALSE
   
   set.plot <- function(){
     par(mai=c(0,0,0,0), omi=c(0,0,0,0), xaxs = 'i', yaxs = 'i')
@@ -47,7 +44,6 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
     shown.inactive <- which(rgeos::gContains(SpP, non.harvey.gages, byid = TRUE))
     shown.inactive.gages <<- non.harvey.gages[shown.inactive, ]
     sp::plot(shown.inactive.gages, pch=20, add=TRUE) # doing this because we are coding based on counting numbers of circles...
-    sp::plot(houston, add = TRUE)
   })
   library(xml2)
   # let this thing scale:
@@ -93,7 +89,6 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   g.states <- xml_add_child(svg, 'g', id='states', .where = 3L)
   g.storm <- xml_add_child(svg, 'g', id='storm','class'='storm-dots')
   g.legend <- xml_add_child(svg, 'g', id='precip-legend','class'='legend', transform='translate(12,12)scale(0.8)')
-  g.houston <- xml_add_child(svg, 'g', id='houston-poly')
   g.watermark <- xml_add_child(svg, 'g', id='usgs-watermark',transform=sprintf('translate(2,%s)scale(0.40)', as.character(as.numeric(vb[4])-62)))
   g.borders <- xml_add_child(svg, 'g', id='focus-borders') # on top
   
@@ -189,12 +184,6 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
                 class='svg-text state-overlay-text')
   xml_add_child(g.overlays, 'text', 'Mississippi', dx = '632', dy = "90", 'text-anchor'='middle', 
                 class='svg-text state-overlay-text')
-  
-  houston <- xml_find_all(svg.addons, '//*[local-name()="path"]')[length(counties)+1]
-  if (add.houston){
-    xml_add_child(g.houston, 'path', d = xml_attr(houston, 'd'), 'class' = 'houston-boundary')  
-  }
-  
   
   ys <- as.character(seq(55, 180, length.out = length(legend.bins)))
   box.w <- '12'

@@ -73,10 +73,6 @@ line, polyline, path{
   font-size: 1.9em;
   fill:#A9A9A9;
 }
-.houston-boundary {
-  fill:none;
-  stroke:red;
-}
 .legend-title {
   font-size: 1.3em;
 }
