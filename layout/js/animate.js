@@ -79,7 +79,7 @@ $(document).ready(function() {
 
 
 var hoverTimer = null;
-var hoverDelay = 1000; //ms
+var hoverDelay = 400; //ms
   
 function hovertext(text, evt){
   var tooltip = document.getElementById("tooltip-text");
