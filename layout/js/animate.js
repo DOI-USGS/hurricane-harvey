@@ -80,12 +80,17 @@ $(document).ready(function() {
 });
 
 
+var hoverTimer = null;
+var hoverDelay = 400; //ms
   
 function hovertext(text, evt){
   var tooltip = document.getElementById("tooltip-text");
   var tooltip_bg = document.getElementById("tooltip-box");    
   var tool_pt = document.getElementById("tooltip-point");
-  if (evt === undefined){ 
+  if (evt === undefined){
+    if(hoverTimer) {
+      clearTimeout(hoverTimer); //stop when off area
+    }
     tooltip.firstChild.data = ' ';
     tooltip_bg.setAttribute("class","hidden");
     tooltip_bg.setAttribute("x",0);
@@ -111,6 +116,12 @@ function hovertext(text, evt){
     tooltip_bg.setAttribute("class","tooltip-box");
     tool_pt.setAttribute("class","tooltip-box");
     tooltip_bg.setAttribute("width", length+12);
+    if(hoverTimer){
+      clearTimeout(hoverTimer);
+    }
+    hoverTimer = setTimeout(function(){
+      ga("send", "event", "figure", evt.target.id);
+    }, hoverDelay);
   }
 }
 function cursorPoint(evt){  

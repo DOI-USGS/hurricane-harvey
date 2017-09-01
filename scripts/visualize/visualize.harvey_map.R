@@ -169,7 +169,7 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   #removing the js code from the inactive ones, so no need to match info
   for (i in 1:length(non.cr)){ 
     xml_add_child(g.storm, 'circle', cx = xml_attr(non.cr[i], 'cx'), cy = xml_attr(non.cr[i], 'cy'), 
-                  class='nwis-inactive', r='1.5', onmouseout="hovertext(' ');",
+                  class='nwis-inactive', r='1.5', onmouseout="hovertext(' ');", id = sprintf('inactive-%s', shown.inactive.gages$site_no[i]),
                   onmousemove=sprintf("hovertext('USGS %s',evt);", shown.inactive.gages$site_no[i]))
   }
   
