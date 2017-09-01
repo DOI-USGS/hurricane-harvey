@@ -55,8 +55,10 @@ var playPause = function() {
     clearInterval(interval);
     running = false;
     button.html("Play");
+    ga('send', 'event', 'figure', 'user pressed pause');
   } else {
     running = true;
+    ga('send', 'event', 'figure', 'user pressed play');
     button.html("Pause")
     interval = setInterval(function() {
       if (timestep < prcpTimes.times.length) {
