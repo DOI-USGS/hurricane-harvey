@@ -8,7 +8,16 @@
     }
 }
 
-a{text-decoration:none;}
+body {
+    font-family: "Source Sans Pro", sans-serif;
+}
+
+a{
+  color:rgb(0,51,102);
+  font-weight:600;
+  word-wrap: break-word;
+  text-decoration:none;
+}
 
 #map-figure,
 #dataSources{
@@ -30,12 +39,6 @@ figurecaption{
 #dataSources p{
   margin-bottom:10px;
   font-size:1.1em;
-}
-
-a{
-  color:rgb(0,51,102);
-  font-weight:600;
-  word-wrap: break-word;
 }
 
 #dataSources a:hover{
