@@ -37,8 +37,14 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   library(rgeos)
   svg.addons <- svglite::xmlSVG(width = 10, height = 8, {
     set.plot()
-    clipped.nons <<- rgeos::gIntersection(non.harvey.gages, as(extent(as.vector(t(par("usr")))), "SpatialPolygons"), byid = T)
-    sp::plot(clipped.nons, pch=20, add=TRUE) # doing this because we are coding based on counting numbers of circles...
+    # doing this because not all of the gages are now in the plotting area. 
+    usr <- par("usr")
+    Sr1 <- Polygon(cbind(c(usr[1], usr[2], usr[2], usr[1], usr[1]),c(usr[3], usr[3], usr[4], usr[4], usr[3])))
+    Srs1 <- Polygons(list(Sr1), "s1")
+    SpP <- SpatialPolygons(list(Srs1), proj4string = CRS(proj4string(non.harvey.gages)))
+    shown.inactive <- which(rgeos::gContains(SpP, non.harvey.gages, byid = TRUE))
+    shown.inactive.gages <<- non.harvey.gages[shown.inactive, ]
+    sp::plot(shown.inactive.gages, pch=20, add=TRUE) # doing this because we are coding based on counting numbers of circles...
   })
   library(xml2)
   # let this thing scale:
@@ -83,6 +89,7 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   g.states <- xml_add_child(svg, 'g', id='states', .where = 3L)
   g.storm <- xml_add_child(svg, 'g', id='storm','class'='storm-dots')
   g.legend <- xml_add_child(svg, 'g', id='precip-legend','class'='legend', transform='translate(15,15)scale(0.8)')
+  g.overlays <- xml_add_child(svg, 'g', id='map-overlays')
   g.watermark <- xml_add_child(svg, 'g', id='usgs-watermark',transform=sprintf('translate(2,%s)scale(0.40)', as.character(as.numeric(vb[4])-62)))
   g.borders <- xml_add_child(svg, 'g', id='focus-borders') # on top
   
@@ -126,6 +133,7 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   xml_add_child(g.spark, 'rect', x='-3', width="137", height='1em', class='legend-box')
   xml_add_child(g.spark, 'text', x='66', 'USGS stream gage discharge', dy='1em', 'text-anchor'='middle', class='svg-text', style='font-size: 0.7em;')
   
+  
   ys <- seq(20,as.numeric(vb[4])-190, length.out = cnt)
   cnt = 0;
   for (i in 1:length(gages)){ # FRAGILE - assumes all gages are on the map!!
@@ -155,19 +163,21 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   }
   
   non.cr <- xml_find_all(svg.addons, '//*[local-name()="circle"]')
-  if (length(non.cr) != length(non.harvey.gages)){
+  if (length(non.cr) != length(shown.inactive.gages)){
     stop('the count of non storm gages on the map doesnt match the count of named gages.')
   }
   #removing the js code from the inactive ones, so no need to match info
   for (i in 1:length(non.cr)){ 
     xml_add_child(g.storm, 'circle', cx = xml_attr(non.cr[i], 'cx'), cy = xml_attr(non.cr[i], 'cy'), 
-                  class='nwis-inactive', r='1.5')
+                  class='nwis-inactive', r='1.5', onmouseout="hovertext(' ');",
+                  onmousemove=sprintf("hovertext('USGS %s',evt);", shown.inactive.gages$site_no[i]))
   }
   
   xml_add_child(g.legend, 'rect', x="-8", y="-8", width='190', height='265', class='legend-box')
   xml_add_child(g.legend, 'text', 'Legend', 'class'='legend-title svg-text', dy='0.75em')
   xml_add_child(g.legend, 'text', 'Inches per hour', 'class'='svg-text', dy='2em')
   xml_add_child(g.legend, 'text', 'dy'= "3.7em", class='smallprint-text svg-text', "(county average precip)")
+  xml_add_child(g.overlays, 'text', 'Texas', dy='-0.5em', 'text-anchor'='middle', class='svg-text', style='font-size: 1.2em;')
   
   ys <- as.character(seq(55, 180, length.out = length(legend.bins)))
   box.w <- '12'
