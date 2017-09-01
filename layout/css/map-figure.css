@@ -32,7 +32,7 @@ figurecaption{
   font-size:1.1em;
 }
 
-#dataSources a{
+a{
   color:rgb(0,51,102);
   font-weight:600;
   word-wrap: break-word;
