@@ -111,6 +111,14 @@ fetch:
     scripts: scripts/fetch/fetch.counties.R
     refetch: TRUE
     mimetype: application/zip
+  - 
+    id: houston
+    location: cache/houston.geojson
+    reader: json
+    fetcher: houston
+    scripts: scripts/process/fetch.houston.R
+    refetch: FALSE
+    mimetype: application/javascript
   -
     id: nws_conversion
     location: cache/nws_conversion.rds
