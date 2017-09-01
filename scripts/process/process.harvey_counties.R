@@ -88,7 +88,8 @@ fetch.harvey_sites <- function(viz=as.viz("harvey-sites")){
   library(rgeos)
   library(sp)
   library(dplyr)
-  ignore.sites <- c('08041780', '08211503', '08028500', '08067070', '08072760', '08074810') # sites that hydropeak or are otherwise not representative
+  ignore.sites <- c('08041780', '08211503', '08028500', '08067070', 
+                    '08072760', '08074810', '08012150') # sites that hydropeak or are otherwise not representative
   counties <- readData(viz[['depends']][2])
   sites <- readData(viz[['depends']][1]) %>% 
     filter(!site_no %in% ignore.sites) %>% 

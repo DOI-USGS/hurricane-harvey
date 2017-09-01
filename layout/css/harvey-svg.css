@@ -61,18 +61,19 @@ line, polyline, path{
 }
 .time-text {
   font-size: 1.25em;
-  fill:white;
-}
-
-.time-text {
-  font-size: 1.25em;
-  fill:white;
+  fill:#DCDCDC;
 }
 
 .state-overlay-text {
   font-size: 1.9em;
   fill:#A9A9A9;
 }
+
+.gulf-overlay-text {
+  font-size: 1.9em;
+  fill:#696969;
+}
+
 .legend-title {
   font-size: 1.3em;
 }
