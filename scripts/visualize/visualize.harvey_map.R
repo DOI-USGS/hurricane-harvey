@@ -15,8 +15,11 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   spark.sites <- readData(viz[['depends']][9])
   state.borders <- readData(viz[['depends']][10])
   non.harvey.gages <- readData(viz[['depends']][11])
+  houston <- readData(viz[['depends']][12])
   library(svglite)
   library(dplyr)
+  
+  add.houston <- FALSE
   
   set.plot <- function(){
     par(mai=c(0,0,0,0), omi=c(0,0,0,0), xaxs = 'i', yaxs = 'i')
@@ -33,7 +36,6 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
     sp::plot(gages, pch=20, add=TRUE)
     sp::plot(storm, pch=20, add=TRUE)
   })
-  library(raster)
   library(rgeos)
   svg.addons <- svglite::xmlSVG(width = 10, height = 8, {
     set.plot()
@@ -45,6 +47,7 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
     shown.inactive <- which(rgeos::gContains(SpP, non.harvey.gages, byid = TRUE))
     shown.inactive.gages <<- non.harvey.gages[shown.inactive, ]
     sp::plot(shown.inactive.gages, pch=20, add=TRUE) # doing this because we are coding based on counting numbers of circles...
+    sp::plot(houston, add = TRUE)
   })
   library(xml2)
   # let this thing scale:
@@ -86,10 +89,11 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
 
   
   g.track <- xml_add_child(svg, 'g', id='track','class'='track-polyline')
+  g.overlays <- xml_add_child(svg, 'g', id='map-overlays', .where = 3L)
   g.states <- xml_add_child(svg, 'g', id='states', .where = 3L)
   g.storm <- xml_add_child(svg, 'g', id='storm','class'='storm-dots')
-  g.legend <- xml_add_child(svg, 'g', id='precip-legend','class'='legend', transform='translate(15,15)scale(0.8)')
-  g.overlays <- xml_add_child(svg, 'g', id='map-overlays')
+  g.legend <- xml_add_child(svg, 'g', id='precip-legend','class'='legend', transform='translate(12,12)scale(0.8)')
+  g.houston <- xml_add_child(svg, 'g', id='houston-poly')
   g.watermark <- xml_add_child(svg, 'g', id='usgs-watermark',transform=sprintf('translate(2,%s)scale(0.40)', as.character(as.numeric(vb[4])-62)))
   g.borders <- xml_add_child(svg, 'g', id='focus-borders') # on top
   
@@ -173,11 +177,24 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
                   onmousemove=sprintf("hovertext('USGS %s',evt);", shown.inactive.gages$site_no[i]))
   }
   
-  xml_add_child(g.legend, 'rect', x="-8", y="-8", width='190', height='265', class='legend-box')
+  xml_add_child(g.legend, 'rect', x="-8", y="-8", width='185', height='265', class='legend-box')
   xml_add_child(g.legend, 'text', 'Legend', 'class'='legend-title svg-text', dy='0.75em')
   xml_add_child(g.legend, 'text', 'Inches per hour', 'class'='svg-text', dy='2em')
   xml_add_child(g.legend, 'text', 'dy'= "3.7em", class='smallprint-text svg-text', "(county average precip)")
-  xml_add_child(g.overlays, 'text', 'Texas', dy='-0.5em', 'text-anchor'='middle', class='svg-text', style='font-size: 1.2em;')
+  xml_add_child(g.overlays, 'text', 'Texas', dx = '250', dy = "50", 'text-anchor'='middle', 
+                class='svg-text state-overlay-text')
+  xml_add_child(g.overlays, 'text', 'Mexico', dx = '60', dy = "490", 'text-anchor'='middle', 
+                class='svg-text state-overlay-text')
+  xml_add_child(g.overlays, 'text', 'Louisiana', dx = '466', dy = "52", 'text-anchor'='middle', 
+                class='svg-text state-overlay-text')
+  xml_add_child(g.overlays, 'text', 'Mississippi', dx = '632', dy = "90", 'text-anchor'='middle', 
+                class='svg-text state-overlay-text')
+  
+  houston <- xml_find_all(svg.addons, '//*[local-name()="path"]')[length(counties)+1]
+  if (add.houston){
+    xml_add_child(g.houston, 'path', d = xml_attr(houston, 'd'), 'class' = 'houston-boundary')  
+  }
+  
   
   ys <- as.character(seq(55, 180, length.out = length(legend.bins)))
   box.w <- '12'
@@ -189,14 +206,14 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   
   xml_add_child(g.legend, 'path', d=sprintf('M-4,%s h%s',as.character(as.numeric(ys[i])+30), 20), class='track-polyline')
   xml_add_child(g.legend, 'circle', cx = as.character(as.numeric(box.w)/2), r='8', class='storm-dot-legend', cy = as.character(as.numeric(ys[i])+30), class='storm-legend-dot')
-  xml_add_child(g.legend, 'text', x=box.w, 'dx'="0.5em", y=as.character(as.numeric(ys[i])+30), 'dy'= "0.33em", class='storm-legend-text svg-text', "Hurricane Harvey")
+  xml_add_child(g.legend, 'text', x=box.w, 'dx'="0.5em", y=as.character(as.numeric(ys[i])+30), 'dy'= "0.33em", class='storm-legend-text svg-text', "Harvey")
   
-  xml_add_child(g.legend, 'circle', cx = as.character(as.numeric(box.w)/2), r='3', cy = as.character(as.numeric(ys[i])+50), class='nwis-legend-dot')
-  xml_add_child(g.legend, 'text', x=box.w, 'dx'="0.2em", y=as.character(as.numeric(ys[i])+50), 'dy'= "0.33em", class='nwis-legend-text svg-text', "USGS")
-  xml_add_child(g.legend, 'text', x=box.w, 'dx'="46", y=as.character(as.numeric(ys[i])+50), 'dy'= "0.33em", class='smallprint-text svg-text', "stream gage (featured)")
-  xml_add_child(g.legend, 'circle', cx = as.character(as.numeric(box.w)/2), r='3', cy = as.character(as.numeric(ys[i])+65), class='nwis-inactive')
-  xml_add_child(g.legend, 'text', x=box.w, 'dx'="0.2em", y=as.character(as.numeric(ys[i])+65), 'dy'= "0.33em", class='nwis-legend-text svg-text', "USGS")
-  xml_add_child(g.legend, 'text', x=box.w, 'dx'="46", y=as.character(as.numeric(ys[i])+65), 'dy'= "0.33em", class='smallprint-text svg-text', "stream gage")
+  xml_add_child(g.legend, 'circle', cx = as.character(as.numeric(box.w)/2 - 3), r='3', cy = as.character(as.numeric(ys[i])+50), class='nwis-legend-dot')
+  xml_add_child(g.legend, 'text', x=box.w, 'dx'="-0.1em", y=as.character(as.numeric(ys[i])+50), 'dy'= "0.33em", class='nwis-legend-text svg-text', "USGS")
+  xml_add_child(g.legend, 'text', x=box.w, 'dx'="41", y=as.character(as.numeric(ys[i])+50), 'dy'= "0.33em", class='smallprint-text svg-text', "stream gage (featured)")
+  xml_add_child(g.legend, 'circle', cx = as.character(as.numeric(box.w)/2 - 3), r='3', cy = as.character(as.numeric(ys[i])+65), class='nwis-inactive')
+  xml_add_child(g.legend, 'text', x=box.w, 'dx'="-0.1em", y=as.character(as.numeric(ys[i])+65), 'dy'= "0.33em", class='nwis-legend-text svg-text', "USGS")
+  xml_add_child(g.legend, 'text', x=box.w, 'dx'="41", y=as.character(as.numeric(ys[i])+65), 'dy'= "0.33em", class='smallprint-text svg-text', "stream gage")
   
   xml_add_child(svg, 'text', ' ', id='timestamp-text', class='time-text svg-text', x="650", y="550", 'text-anchor'="middle")
   
