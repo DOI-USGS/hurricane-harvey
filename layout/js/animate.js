@@ -118,7 +118,7 @@ function hovertext(text, evt){
       clearTimeout(hoverTimer);
     }
     hoverTimer = setTimeout(function(){
-      ga("send", "event", "figure", evt.class + ":" + text);
+      ga("send", "event", "figure", evt.target.id + ":" + text);
     }, hoverDelay);
   }
 }
