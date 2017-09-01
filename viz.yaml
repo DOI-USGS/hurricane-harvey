@@ -338,6 +338,10 @@ publish:
     location: layout/js/jquery-3.1.1.min.js
     mimetype: application/javascript
   -
+    id: vizlab-js
+    location: layout/js/vizlab.js
+    mimetype: application/javascript
+  -
     id: animate-js
     location: layout/js/animate.js
     mimetype: application/javascript
@@ -359,12 +363,12 @@ publish:
     template: fullpage
     scripts: scripts/publish/json.R
     depends: ["footer","footerCSS","header-section", "figure-section", "data-sources", "map-figure-css", 
-      "header-footer-css", "precip-colors", "timesteps_pub", "jquery-js", "animate-js", "timesteps",
+      "header-footer-css", "precip-colors", "timesteps_pub", "jquery-js", "animate-js", "vizlab-js", "timesteps",
       "svg-css","thumbnail", "vizlab-favicon"]
     context:
       footer: footer
       header: header-section
-      resources: ["map-figure-css","header-footer-css","footerCSS","timesteps_pub", "jquery-js", "animate-js", "svg-css",
+      resources: ["map-figure-css","header-footer-css","footerCSS","timesteps_pub", "jquery-js", "animate-js", "vizlab-js", "svg-css",
         "<link rel=\"icon\" type=\"image/ico\" href=\"images/favicon.ico\"/>","timesteps"]
       sections: [ "figure-section", "data-sources"]
   -
