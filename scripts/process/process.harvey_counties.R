@@ -1,5 +1,13 @@
 epsg_code <- '+init=epsg:3082' 
 
+fetch.houston <- function(viz = as.viz('houston')){
+  library(httr)
+  GET('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/houston.geojson', httr::write_disk(viz[['location']], overwrite = TRUE))
+}
+
+readData.geojson <- function(viz){
+  return(rgdal::readOGR(viz[['location']]))
+}
 
 fetch.harvey_counties <- function(viz = as.viz('harvey-counties')){
   library(rgeos)
@@ -66,6 +74,12 @@ process.harvey_track <- function(viz){
   saveRDS(track, viz[['location']])
 }
 
+process.houston_sp <- function(viz = as.viz('houston-sp')){
+  
+  houston <- readData(viz[['depends']][1])
+  h.dissolved <- rgeos::gSimplify(gUnaryUnion(houston), .006)
+  saveRDS(spTransform(h.dissolved, CRS(epsg_code)), viz[['location']])
+}
 # viz <- yaml.load_file("viz.yaml")
 # viz <- viz$process
 # viz <- viz[[which(unlist((lapply(viz, function(x) x$id == "harvey-sites"))))]]
@@ -74,7 +88,7 @@ fetch.harvey_sites <- function(viz=as.viz("harvey-sites")){
   library(rgeos)
   library(sp)
   library(dplyr)
-  ignore.sites <- c('08041780', '08211503', '08028500', '08067070') # sites that hydropeak or are otherwise not representative
+  ignore.sites <- c('08041780', '08211503', '08028500', '08067070', '08072760', '08074810') # sites that hydropeak or are otherwise not representative
   counties <- readData(viz[['depends']][2])
   sites <- readData(viz[['depends']][1]) %>% 
     filter(!site_no %in% ignore.sites) %>% 

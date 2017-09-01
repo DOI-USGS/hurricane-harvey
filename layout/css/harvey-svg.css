@@ -53,9 +53,8 @@ line, polyline, path{
   stroke: none
 }
 .legend-box {
-  fill: white;
+  fill: #C0C0C0;
   stroke: none;
-  fill-opacity: 0.4;
 }
 .storm-dot, .storm-dot-legend {
   fill: #F29E4C;
@@ -63,6 +62,16 @@ line, polyline, path{
 .time-text {
   font-size: 1.25em;
   fill:white;
+}
+
+.time-text {
+  font-size: 1.25em;
+  fill:white;
+}
+
+.state-overlay-text {
+  font-size: 1.9em;
+  fill:#A9A9A9;
 }
 .legend-title {
   font-size: 1.3em;
@@ -77,7 +86,6 @@ line, polyline, path{
 }
 
 .nwis-inactive {
-  cursor: pointer;
   fill: #023139;
   fill-opacity: 0.5;
   stroke: none;
