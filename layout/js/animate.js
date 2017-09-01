@@ -126,6 +126,11 @@ function setNormal(id){
   var className = id.split('-')[0];
   document.getElementById(id).setAttribute('class', className);
 }
-function openNWIS(id){
+function openNWIS(id, event){
+ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+   event.stopPropagation();
+}else{
   window.open('http://waterdata.usgs.gov/nwis/uv?site_no='+id,'_blank');
+  }
+  
 }
