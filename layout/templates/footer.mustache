@@ -1,34 +1,17 @@
-<div class="footerContentAligner">
+
+  <div class="footerContentAligner">
   
     <div class="usgsLogoFooterArea">
       <a href="https://usgs.gov" target="_blank">
-        {{{usgs-logo}}}
+        {{{usgsLogo}}}
       </a>
-
-    </div>
-    
-    <div id="relatedVizzies">
-    	<h3>Related Visualizations:</h3>
-    	
-    	{{#vizzies}}
-    		<a href="{{url}}" target="_blank">
-    			<div class="relatedItem">
-    			  <div class="titleHandler">
-    				  <h4>{{name}}</h4>
-    				</div>
-    				<div class="footerThumnail">
-    					<img src="{{thumbLoc}}" alt=""/>
-    				</div>
-    			</div>
-    		</a>
-    	{{/vizzies}}
     </div>
     
     <div class="footerMenu">
       <a href="https://owi.usgs.gov/vizlab/" target="_blank">
         <p>About Us</p>
       </a>
-      <a href="https://github.com/USGS-VIZLAB/hurricane-harvey" target="_blank" onclick="ga('send', 'event', 'outbound', 'clicked on repo')">
+      <a href="{{github-url}}" target="_blank" onclick="ga('send', 'event', 'outbound', 'clicked on repo')">
         <p>Get the Code</p>
       </a>
       <a href="https://owi.usgs.gov/" target="_blank">
@@ -38,5 +21,43 @@
         <p>Contact Us</p>
       </a>
     </div>
+    
+    <div id="relatedItems">
+    {{#VizziesInFooter}}
+      <div id="relatedVizzies">
+        {{#vizzies}}
+      		<a href="{{url}}" target="_blank">
+      			<div class="relatedItem">
+      			<div class="footerThumnail">
+      					<img src="{{thumbLoc}}" alt=""/>
+      				</div>
+      			  <div class="titleHandler">
+      				  <h4>{{name}}</h4>
+      				</div>
+      			</div>
+      		</a>
+      	{{/vizzies}}
+      </div>
+    {{/VizziesInFooter}}
+      
+    {{#blogsInFooter}}
+    <div id="relatedBlogs">
+    	{{#blogs}}
+    		<a href="{{url}}" target="_blank">
+    			<div class="relatedItem">
+    				<div class="footerThumnail blog">
+    					<img src="{{thumbLoc}}" alt=""/>
+    				</div>
+    				<div class="titleHandler">
+    					<h4>{{name}}</h4>
+    				</div>
+    			</div>
+    		</a>
+    	{{/blogs}}
+    	
+    </div>
+    {{/blogsInFooter}}
+  
+  </div><!--relatedItems-->
     
 </div>
