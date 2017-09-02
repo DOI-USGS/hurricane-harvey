@@ -16,13 +16,6 @@ var setColors = function() {
     prcpTimes = data
   });
   svg = document.querySelector("svg");
-  if(svg === null){
-    console.log('starting delay')
-    setTimeout(function(){
-      svg = document.querySelector("svg");
-    }, 1500);
-    console.log('finishing delay')
-  }
   pt = svg.createSVGPoint();
 }
 
@@ -80,8 +73,8 @@ var playPause = function() {
 }
 
 $(document).ready(function() {
-  setColors();
-  setTimeout(playPause, 1000);
+  setTimeout(setColors, 1250);
+  setTimeout(playPause, 500);
 });
 
 
