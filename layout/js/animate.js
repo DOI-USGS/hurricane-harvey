@@ -16,14 +16,12 @@ var setColors = function() {
     prcpTimes = data
   });
   svg = document.querySelector("svg");
-  pt = svg.createSVGPoint();
-  if(svg !== undefined){
-    pt = svg.createSVGPoint();
-  } else {
+  if(svg === null){
     setTimeout(function(){
-      pt = svg.createSVGPoint();
+      svg = document.querySelector("svg");
     }, 750);
   }
+  pt = svg.createSVGPoint();
 }
 
 var animatePrcp = function(timestep) {
