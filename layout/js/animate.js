@@ -1,7 +1,6 @@
 var prcpColors = undefined;
 var prcpTimes = undefined;
 var svg = undefined;
-var xmax = undefined;
 var pt = undefined;
 
 var running = false;
@@ -17,8 +16,14 @@ var setColors = function() {
     prcpTimes = data
   });
   svg = document.querySelector("svg");
-  xmax = Number(svg.getAttribute("viewBox").split(" ")[2]);
   pt = svg.createSVGPoint();
+  if(svg !== undefined){
+    pt = svg.createSVGPoint();
+  } else {
+    setTimeout(function(){
+      pt = svg.createSVGPoint();
+    }, 750);
+  }
 }
 
 var animatePrcp = function(timestep) {
