@@ -29,7 +29,6 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
     set.plot()
     sp::plot(state.borders, add=TRUE)
     sp::plot(states, add=TRUE)
-    sp::plot(track, add=TRUE)
     sp::plot(gages, pch=20, add=TRUE)
     sp::plot(storm, pch=20, add=TRUE)
   })
@@ -44,6 +43,7 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
     shown.inactive <- which(rgeos::gContains(SpP, non.harvey.gages, byid = TRUE))
     shown.inactive.gages <<- non.harvey.gages[shown.inactive, ]
     sp::plot(shown.inactive.gages, pch=20, add=TRUE) # doing this because we are coding based on counting numbers of circles...
+    sp::plot(track, add=TRUE)
   })
   library(xml2)
   # let this thing scale:
@@ -105,8 +105,8 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   xml_remove(p[rmv.i])
   
   
-  pl <- xml_find_all(svg, '//*[local-name()="polyline"]')
-  for (i in (length(pl)+1 - length(track)): length(pl)){
+  pl <- xml_find_all(svg.addons, '//*[local-name()="polyline"]')
+  for (i in 1:length(pl)){
     xml_add_child(g.track, 'polyline', points = xml_attr(pl[i], 'points'))
   }
 
