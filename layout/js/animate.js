@@ -17,9 +17,11 @@ var setColors = function() {
   });
   svg = document.querySelector("svg");
   if(svg === null){
+    console.log('starting delay')
     setTimeout(function(){
       svg = document.querySelector("svg");
-    }, 750);
+    }, 1500);
+    console.log('finishing delay')
   }
   pt = svg.createSVGPoint();
 }
