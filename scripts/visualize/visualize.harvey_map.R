@@ -2,6 +2,36 @@
 # viz <- viz$visualize
 # viz <- viz[[which(unlist((lapply(viz, function(x) x$id == "harvey-map"))))]]
 
+visualize.svg_base_map <- function(viz){
+  geoms <- readDepends(viz)
+  library(svglite)
+  
+  # 1) set up shell svg, w/ proper size and aspect
+  # 2) add basic groups etc, including <defs><g id="template-geoms"/></defs> and <g id="styled-geoms"/>
+  # 3) set the plot bounds, including aspect of map
+  # 4) read in depends geoms
+  # 5) loop through depends, trim, then add geoms to <use/> elements (in id="template-geoms"), with id="u-{id}"
+  # 6) create geoms to mirror ids in <use/> elements, add attributes
+}
+get_sp_bbox <- function(sp){
+  bb <- bbox(sp)
+  Sr1 <- Polygon(cbind(c(bb[1, 3, 3, 1, 1]), c(bb[2, 2, 4, 4, 2])))
+  Srs1 <- Polygons(list(Sr1), "s1")
+  SpP <- SpatialPolygons(list(Srs1), proj4string = CRS(proj4string(sp)))
+  return(SpP)
+}
+
+get_sp_lims <- function(sp, ...){
+  bb <- get_sp_bbox(sp)
+  # now default plot
+  # extract usr, return lims from usr
+  .fun <- svglite::svgstring(standalone = F, ...)
+  usr <- par('usr')
+  rm(.fun)
+  
+  return(list(xlim = usr[c(1,2)], ylim = usr[c(3,4)]))
+}
+
 visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   
   counties <- readData(viz[['depends']][1])
