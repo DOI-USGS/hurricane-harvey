@@ -23,6 +23,13 @@ get_sp_bbox <- function(sp){
   return(as.sp_box(xs, ys, proj.string))
 }
 
+
+#' create a spatial polygon from x and y coordinates
+#' 
+#' @param xs a numeric vector of length two, containing the min and max of x values
+#' @param ys a numeric vector of length two, containing the min and max of y values
+#' 
+#' @return a `SpatialPolygons` object
 as.sp_box <- function(xs, ys, proj.string){
   Sr1 <- Polygon(cbind(c(xs[c(1, 2, 2, 1, 1)]), c(ys[c(1, 1, 2, 2, 1)])))
   Srs1 <- Polygons(list(Sr1), "s1")
