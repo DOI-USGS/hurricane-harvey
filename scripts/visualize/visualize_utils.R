@@ -106,17 +106,29 @@ get_sp_lims <- function(sp, ..., width = 10, height = 8, pointsize = 12, return 
 #' @param sp a spatial object
 #' @param xlim the x limits of the plot using the same coordinate system as `sp`
 #' @param ylim the y limits of the plot using the same coordinate system as `sp`
-#' @param ... additional args (unused)
+#' @param ... additional args, e.g., `clip.fun` for `Spatial` class method (others unused)
 #' 
 #' @return a clipped sp object
 #' @export
 clip_sp <- function(sp, xlim, ylim, ...) {
-  message('clip_sp is not fully implemented for all sp classes')
+  message('clip_sp is not fully tested for all sp classes')
   UseMethod(generic = 'clip_sp', object = sp)
 }
 
 
 clip_sp.SpatialPolygonsDataFrame <- function(sp, xlim, ylim, ...){
+  
+  clipped.sp <- NextMethod('clip_sp', sp, ..., clip.fun = rgeos::gIntersection)
+  return(clipped.sp)
+}
+
+clip_sp.SpatialPointsDataFrame <- function(sp, xlim, ylim, ...){
+  
+  clipped.sp <- NextMethod('clip_sp', sp, ..., clip.fun = rgeos::gContains)
+  return(clipped.sp)
+}
+
+clip_sp.Spatial <- function(sp, xlim, ylim, ..., clip.fun = rgeos::gIntersection){
   
   clip <- as.sp_box(xlim, ylim, CRS(proj4string(sp)))
   g.i <- rgeos::gIntersects(sp, clip, byid = T) 
@@ -125,7 +137,7 @@ clip_sp.SpatialPolygonsDataFrame <- function(sp, xlim, ylim, ...){
   out <- vector(mode="list", length=length(which(g.i)))
   ii <- 1
   for (i in seq(along=g.i)) if (g.i[i]) {
-    out[[ii]] <- rgeos::gIntersection(sp[i,], clip)
+    out[[ii]] <- clip.fun(sp[i,], clip)
     row.names(out[[ii]]) <- row.names(sp)[i]; ii <- ii+1
   }
   # use rbind.SpatialPolygons method to combine into a new object.
