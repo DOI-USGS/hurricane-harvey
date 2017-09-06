@@ -17,12 +17,18 @@ visualize.svg_base_map <- function(viz){
 #' @return a `SpatialPolygons` object that represents the bounding box of the input `sp`
 get_sp_bbox <- function(sp){
   bb <- bbox(sp)
-  Sr1 <- Polygon(cbind(c(bb[c(1, 3, 3, 1, 1)]), c(bb[c(2, 2, 4, 4, 2)])))
-  Srs1 <- Polygons(list(Sr1), "s1")
-  SpP <- SpatialPolygons(list(Srs1), proj4string = CRS(proj4string(sp)))
-  return(SpP)
+  xs <- bb[c(1, 3)]
+  ys <- bb[c(2, 4)]
+  proj.string = CRS(proj4string(sp))
+  return(as.sp_box(xs, ys, proj.string))
 }
 
+as.sp_box <- function(xs, ys, proj.string){
+  Sr1 <- Polygon(cbind(c(xs[c(1, 2, 2, 1, 1)]), c(ys[c(1, 1, 2, 2, 1)])))
+  Srs1 <- Polygons(list(Sr1), "s1")
+  SpP <- SpatialPolygons(list(Srs1), proj4string = proj.string)
+  return(SpP)
+}
 
 #' extract the svg elements from an sp object
 #' 
@@ -48,9 +54,6 @@ get_svg_geoms <- function(sp, ..., width = 10, height = 8, pointsize = 12, xlim,
   
   # clip the spatial object so that it only contains features and data that are within the plotting range:
   clipped.sp <- clip_sp(sp, xlim, ylim)
-  
-  # establish the holder of the geoms as an xml doc
-  geoms <- xml2::xml_new_document()
   
   rendered <- svglite::xmlSVG(width = width, height = height, pointsize = pointsize, standalone = F, {
     set_sp_plot()
@@ -106,8 +109,23 @@ get_sp_lims <- function(sp, ..., width = 10, height = 8, pointsize = 12, return 
 #' 
 #' @return a clipped sp object
 clip_sp <- function(sp, xlim, ylim){
-  message('clip_sp is not implemented yet')
-  return(sp)
+  message('clip_sp is not fully implemented for all sp classes')
+  
+  clip <- as.sp_box(xlim, ylim, CRS(proj4string(sp)))
+  g.i <- rgeos::gIntersects(sp, clip, byid = T) 
+  
+  # from https://stackoverflow.com/questions/13982773/crop-for-spatialpolygonsdataframe
+  out <- vector(mode="list", length=length(which(g.i)))
+  ii <- 1
+  for (i in seq(along=g.i)) if (g.i[i]) {
+    out[[ii]] <- rgeos::gIntersection(sp[i,], clip)
+    row.names(out[[ii]]) <- row.names(sp)[i]; ii <- ii+1
+  }
+  # use rbind.SpatialPolygons method to combine into a new object.
+  clipped.sp <- do.call("rbind", out)
+  
+  # //to do: use rgeos::gContains for points
+  return(clipped.sp)
 }
 
 #' set up the basic plot par for a map
