@@ -106,10 +106,17 @@ get_sp_lims <- function(sp, ..., width = 10, height = 8, pointsize = 12, return 
 #' @param sp a spatial object
 #' @param xlim the x limits of the plot using the same coordinate system as `sp`
 #' @param ylim the y limits of the plot using the same coordinate system as `sp`
+#' @param ... additional args (unused)
 #' 
 #' @return a clipped sp object
-clip_sp <- function(sp, xlim, ylim){
+#' @export
+clip_sp <- function(sp, xlim, ylim, ...) {
   message('clip_sp is not fully implemented for all sp classes')
+  UseMethod(generic = 'clip_sp', object = sp)
+}
+
+
+clip_sp.SpatialPolygonsDataFrame <- function(sp, xlim, ylim, ...){
   
   clip <- as.sp_box(xlim, ylim, CRS(proj4string(sp)))
   g.i <- rgeos::gIntersects(sp, clip, byid = T) 
