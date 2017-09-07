@@ -33,7 +33,7 @@ info:
       repo: github
       version: 1.2.0.9002
       name: jread-usgs/svglite
-      ref: not_tagged_yet
+      ref: svgnano_01
     dplyr: 
       repo: CRAN
       version: 0.7.2

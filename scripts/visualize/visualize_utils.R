@@ -67,7 +67,7 @@ get_svg_geoms <- function(sp, ..., width = 10, height = 8, pointsize = 12, xlim,
     plot(clipped.sp, ..., xlim = xlim, ylim = ylim)
   })
   
-  sp.geoms <- tail(xml2::xml_children(rendered), length(sp))
+  sp.geoms <- tail(xml2::xml_children(rendered), length(clipped.sp))
   
   # here either strip the important attributes out and re-add them with a xml_set_attrs call, or lapply the nodeset and add attrs one by one:
   
@@ -140,15 +140,23 @@ clip_sp.Spatial <- function(sp, xlim, ylim, ..., clip.fun = rgeos::gIntersection
   clip <- as.sp_box(xlim, ylim, CRS(proj4string(sp)))
   g.i <- rgeos::gIntersects(sp, clip, byid = T) 
   
-  # from https://stackoverflow.com/questions/13982773/crop-for-spatialpolygonsdataframe
-  out <- vector(mode="list", length=length(which(g.i)))
-  ii <- 1
-  for (i in seq(along=g.i)) if (g.i[i]) {
-    out[[ii]] <- clip.fun(sp[i,], clip)
-    row.names(out[[ii]]) <- row.names(sp)[i]; ii <- ii+1
-  }
+  has.data <- ("data" %in% slotNames(sp))
+
+  out <- lapply(which(g.i), function(i) {
+    g.out <- clip.fun(sp[i,], clip)
+    row.names(g.out) <- row.names(sp)[i]
+    return(g.out)
+  })
+  
   # use rbind.SpatialPolygons method to combine into a new object.
   clipped.sp <- do.call("rbind", out)
+  
+  if(has.data){
+    data.out <- as.data.frame(sp)[g.i, ]
+    row.names(data.out) <- row.names(sp)[g.i]
+    clipped.sp <- as(object = clipped.sp, Class = class(sp))
+    clipped.sp@data <- data.out
+  }
   
   # //to do: use rgeos::gContains for points
   return(clipped.sp)
