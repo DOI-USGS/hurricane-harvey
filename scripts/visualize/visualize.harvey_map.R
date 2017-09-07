@@ -1,6 +1,4 @@
-# viz <- yaml.load_file("viz.yaml")
-# viz <- viz$visualize
-# viz <- viz[[which(unlist((lapply(viz, function(x) x$id == "harvey-map"))))]]
+
 
 visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   
@@ -17,6 +15,8 @@ visualize.harvey_map <- function(viz = as.viz("harvey-map")){
   non.harvey.gages <- readData(viz[['depends']][11])
   library(svglite)
   library(dplyr)
+  
+  
   
   set.plot <- function(){
     par(mai=c(0,0,0,0), omi=c(0,0,0,0), xaxs = 'i', yaxs = 'i')
